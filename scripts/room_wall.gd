@@ -81,7 +81,7 @@ func _construct_wall(pos, dir, is_door):
     add_child(wall)
     var shape_owner = wall.create_shape_owner(wall)
     var shape = RectangleShape2D.new()
-    shape.set_extents((wall_nor_cc * WALL_SIZE + _get_dir_as_vec(dir)).abs() / 2.0)
+    shape.set_extents((wall_nor_cc * WALL_SIZE + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
   else:
     # Construct 2 walls, of size (WALL_SIZE - DOOR_SIZE)/2
@@ -95,7 +95,7 @@ func _construct_wall(pos, dir, is_door):
     add_child(wall)
     var shape_owner = wall.create_shape_owner(wall)
     var shape = RectangleShape2D.new()
-    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir)).abs() / 2.0)
+    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
 
     sprite = _get_wall_sprite(dir);
@@ -106,12 +106,28 @@ func _construct_wall(pos, dir, is_door):
     add_child(wall)
     shape_owner = wall.create_shape_owner(wall)
     shape = RectangleShape2D.new()
-    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir)).abs() / 2.0)
+    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
 
+func _construct_wall_corner(pos, dir):
+    var sprite = _get_wall_sprite(dir);
+    var wall = StaticBody2D.new()
+    wall.position = pos;
+    wall.add_child(sprite)
+    add_child(wall)
+    var shape_owner = wall.create_shape_owner(wall)
+    var shape = RectangleShape2D.new()
+    shape.set_extents(Vector2(8, 8))
+    wall.shape_owner_add_shape(shape_owner, shape)
+
+
 func _ready():
-  _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, true)
-  _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, true)
-  _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, true)
-  _construct_wall(Vector2(0, -WALL_SIZE_2 - 8.0), BOTTOM, true)
+  _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, has_doors & RIGHT > 0)
+  _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, has_doors & BOTTOM > 0)
+  _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, has_doors & LEFT > 0)
+  _construct_wall(Vector2(0, -WALL_SIZE_2 - 8.0), BOTTOM, has_doors & TOP > 0)
+  _construct_wall_corner(Vector2(-WALL_SIZE_2 - 8.0, -WALL_SIZE_2 - 8.0), RIGHT | BOTTOM)
+  _construct_wall_corner(Vector2(-WALL_SIZE_2 - 8.0,  WALL_SIZE_2 + 8.0), RIGHT | TOP)
+  _construct_wall_corner(Vector2( WALL_SIZE_2 + 8.0, -WALL_SIZE_2 - 8.0), LEFT | BOTTOM)
+  _construct_wall_corner(Vector2( WALL_SIZE_2 + 8.0,  WALL_SIZE_2 + 8.0), LEFT | TOP)
 

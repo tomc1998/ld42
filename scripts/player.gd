@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 const Fireball = preload("res://scenes/Fireball.tscn")
+const Room = preload("res://scenes/Room.tscn")
 
 export var speed = 60
 export var sprint_modifier = 1.8
@@ -54,3 +55,23 @@ func _shoot_fireball(target):
   fireball.set_dir(vec)
   fireball.position = position + vec * 8.0
   world.add_child(fireball)
+  _shrink_curr_room(20.0);
+
+
+# Find the room we're currently in (linear search) and shrink that one by the
+# given amount.
+func _shrink_curr_room(amount):
+  # Find the room
+  for r in world.get_node("DungeonGenerator").get_children():
+    if r.get_filename() == Room.get_path():
+      # Check if we are inside the room
+      var room_wall = r.get_node("RoomWall")
+      var room_size = Vector2(room_wall.size, room_wall.size)
+      var room_rect = Rect2(r.position - room_size / 2.0, room_size)
+      print(room_rect)
+      if room_rect.has_point(position):
+        print("Shrinking")
+        room_wall.shrink(amount)
+        return
+
+        

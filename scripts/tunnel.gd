@@ -22,8 +22,6 @@ func _construct_walls():
     wall.set_collision_layer_bit(0, false)
     wall.set_collision_layer_bit(19, true)
     wall.position = dir * MAX_TUNNEL_SIZE / 2 + nor * (TUNNEL_WIDTH / 2.0 + 8.0)
-    print(-nor)
-    print(RoomWall._get_vec_as_dir(-nor))
     var sprite = RoomWall._get_wall_sprite(RoomWall._get_vec_as_dir(-nor), false);
     sprite.scale = nor.abs() + dir.abs() * MAX_TUNNEL_SIZE / 16.0
     wall.add_child(sprite)

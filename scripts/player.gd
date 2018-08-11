@@ -10,6 +10,12 @@ export var sprint_modifier = 1.8
 
 onready var world = get_node("/root/World")
 
+export(int) var max_health = 10
+var health = max_health
+
+# Additional force applied other than walking
+var knockback = Vector2(0,0)
+
 # Given a movement vector, set the current animation of the animation player.
 func _set_anim(move_vec, sprinting):
   var anim_player = get_node("AnimationPlayer")
@@ -45,11 +51,21 @@ func _physics_process(delta):
       sprinting = true
       move_vec *= sprint_modifier
   _set_anim(move_vec, sprinting)
-  move_and_slide(move_vec)
+  move_and_slide(move_vec + knockback)
+  knockback *= 0.9
 
   # Check for fireball shooting
   if Input.is_action_just_pressed("primary"):
     _shoot_fireball(get_global_mouse_position())
+
+  if knockback.length_squared() > 100.0:
+    self.modulate.r = 2
+    self.modulate.g = 0.5
+    self.modulate.b = 0.5
+  else:
+    self.modulate.r = 1
+    self.modulate.g = 1
+    self.modulate.b = 1
 
 func _shoot_fireball(target):
   if _shrink_curr_room(FIREBALL_COST):
@@ -72,11 +88,14 @@ func _shrink_curr_room(amount):
       var room_size = Vector2(room_wall.size, room_wall.size)
       var room_rect = Rect2(r.position - room_size / 2.0, room_size)
       if room_rect.has_point(position):
-        print("Shrinking")
         if room_wall.target_size - amount < room_wall.MIN_SIZE: return false
         else:
           room_wall.shrink(amount)
           return true
   return false
 
-        
+# Damage this entity and push it back on the given knockback vec
+func damage(amount, knockback_vec):
+  self.knockback += knockback_vec
+  self.health -= amount
+  if self.health <= 0:

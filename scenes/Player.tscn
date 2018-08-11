@@ -26,6 +26,7 @@ script = ExtResource( 1 )
 _sections_unfolded = [ "Collision" ]
 speed = 60
 sprint_modifier = 1.8
+max_health = 10
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 

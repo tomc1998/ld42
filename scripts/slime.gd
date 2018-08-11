@@ -3,6 +3,8 @@ extends KinematicBody2D
 onready var player = get_node("/root/World/Player")
 onready var anim_player = get_node("AnimationPlayer")
 
+const DAMAGE = 1
+
 const NOTICE_RANGE = 180
 const JUMP_SPEED = 180
 const JUMP_DISTANCE = 100
@@ -45,6 +47,6 @@ func _ready():
   get_node("Hurtbox").connect("body_entered", self, "on_body_entered")
 
 func on_body_entered(body):
-  print("HELLO")
-  print(body.get_class())
+  if body.has_method("damage"):
+    body.callv("damage", [DAMAGE, (body.position - position).normalized() * 300])
   state = STATE_IDLE

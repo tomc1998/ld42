@@ -22,7 +22,11 @@ export(int, FLAGS, "Left", "Top", "Right", "Bottom") var has_doors
 # 5th sprite in the spritesheet reading like a book).
 # If dir is a combination of 2 directions, this returns a corner.
 # Errors if no tex exists for the given dir.
-func _get_wall_sprite(dir):
+# If `invert` is true, the tile is inverted to join walls. For example, there's
+# 2 corner tiles, one which has the corner 'pointing inwards', and one which has
+# 2 wall faces 'pointing outwards'. The first would be inverted, the second is
+# just normal.
+func _get_wall_sprite(dir, invert=false):
   var sprite = Sprite.new()
   sprite.region_enabled = true
   sprite.set_texture(WALL_SPRITESHEET)
@@ -31,10 +35,15 @@ func _get_wall_sprite(dir):
   elif dir == TOP:            sprite.region_rect = Rect2(16, 0, 16, 16)
   elif dir == RIGHT:          sprite.region_rect = Rect2(0, 16, 16, 16)
   elif dir == BOTTOM:         sprite.region_rect = Rect2(16, 16, 16, 16)
-  elif dir == BOTTOM | RIGHT: sprite.region_rect = Rect2(32, 0,  16, 16)
-  elif dir == BOTTOM | LEFT:  sprite.region_rect = Rect2(48, 0,  16, 16)
-  elif dir == TOP    | RIGHT: sprite.region_rect = Rect2(32, 16, 16, 16)
-  elif dir == TOP    | LEFT:  sprite.region_rect = Rect2(48, 16, 16, 16)
+  elif invert && dir == BOTTOM | RIGHT: sprite.region_rect = Rect2(32, 0,  16, 16)
+  elif invert && dir == BOTTOM | LEFT:  sprite.region_rect = Rect2(48, 0,  16, 16)
+  elif invert && dir == TOP    | RIGHT: sprite.region_rect = Rect2(32, 16, 16, 16)
+  elif invert && dir == TOP    | LEFT:  sprite.region_rect = Rect2(48, 16, 16, 16)
+  elif dir == BOTTOM | RIGHT: sprite.region_rect = Rect2(16, 48, 16, 16)
+  elif dir == BOTTOM | LEFT:  sprite.region_rect = Rect2(0,  48, 16, 16)
+  elif dir == TOP    | RIGHT: sprite.region_rect = Rect2(16, 32, 16, 16)
+  elif dir == TOP    | LEFT:  sprite.region_rect = Rect2(0,  32, 16, 16)
+  else: breakpoint
 
   return sprite
 
@@ -73,11 +82,13 @@ func _construct_wall(pos, dir, is_door):
   var wall_nor = _get_dir_as_vec(_get_dir_normal(dir))
   var wall_nor_cc = _get_dir_as_vec(_get_dir_normal_cc(dir))
   if !is_door:
-    var sprite = _get_wall_sprite(dir);
     var wall = StaticBody2D.new()
+    # Add wall sprite
+    var sprite = _get_wall_sprite(dir);
     sprite.apply_scale((wall_nor_cc * WALL_SIZE / 16.0 + _get_dir_as_vec(dir)).abs())
-    wall.position = pos;
     wall.add_child(sprite)
+    # Offset wall & add collision
+    wall.position = pos;
     add_child(wall)
     var shape_owner = wall.create_shape_owner(wall)
     var shape = RectangleShape2D.new()
@@ -87,22 +98,36 @@ func _construct_wall(pos, dir, is_door):
     # Construct 2 walls, of size (WALL_SIZE - DOOR_SIZE)/2
     var wall_size = (WALL_SIZE - DOOR_SIZE)/2.0
 
-    var sprite = _get_wall_sprite(dir);
     var wall = StaticBody2D.new()
-    sprite.apply_scale((wall_nor_cc * wall_size / 16.0 + _get_dir_as_vec(dir)).abs())
-    wall.position = pos + wall_nor_cc * (DOOR_SIZE / 2.0 + wall_size / 2.0);
+    # Add wall sprite
+    var sprite = _get_wall_sprite(dir);
+    sprite.apply_scale((wall_nor_cc * (wall_size - DOOR_SIZE/4.0) / 16.0 + _get_dir_as_vec(dir)).abs())
+    sprite.offset = wall_nor_cc * DOOR_SIZE/4.0 / sprite.scale
     wall.add_child(sprite)
+    # Add corner for door
+    sprite = _get_wall_sprite(dir | _get_dir_normal(dir));
+    sprite.offset = wall_nor * (wall_size/2.0 - DOOR_SIZE/4.0) / sprite.scale
+    wall.add_child(sprite)
+    # Offset wall & add collision
+    wall.position = pos + wall_nor_cc * (DOOR_SIZE / 2.0 + wall_size / 2.0);
     add_child(wall)
     var shape_owner = wall.create_shape_owner(wall)
     var shape = RectangleShape2D.new()
     shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
 
-    sprite = _get_wall_sprite(dir);
     wall = StaticBody2D.new()
-    sprite.apply_scale((wall_nor_cc * wall_size / 16.0 + _get_dir_as_vec(dir)).abs())
-    wall.position = pos + wall_nor * (DOOR_SIZE / 2.0 + wall_size / 2.0);
+    # Add wall sprite
+    sprite = _get_wall_sprite(dir);
+    sprite.apply_scale((wall_nor_cc * (wall_size - DOOR_SIZE/4.0) / 16.0 + _get_dir_as_vec(dir)).abs())
+    sprite.offset = wall_nor * DOOR_SIZE/4.0 / sprite.scale
     wall.add_child(sprite)
+    # Add corner for door
+    sprite = _get_wall_sprite(dir | _get_dir_normal_cc(dir));
+    sprite.offset = wall_nor_cc * (wall_size/2.0 - DOOR_SIZE/4.0) / sprite.scale
+    wall.add_child(sprite)
+    # Offset wall & add collision
+    wall.position = pos + wall_nor * (DOOR_SIZE / 2.0 + wall_size / 2.0);
     add_child(wall)
     shape_owner = wall.create_shape_owner(wall)
     shape = RectangleShape2D.new()
@@ -110,7 +135,7 @@ func _construct_wall(pos, dir, is_door):
     wall.shape_owner_add_shape(shape_owner, shape)
 
 func _construct_wall_corner(pos, dir):
-    var sprite = _get_wall_sprite(dir);
+    var sprite = _get_wall_sprite(dir, true);
     var wall = StaticBody2D.new()
     wall.position = pos;
     wall.add_child(sprite)

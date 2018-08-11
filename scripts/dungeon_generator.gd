@@ -134,11 +134,15 @@ func _ready():
   print("Hello")
   var positions = _gen_positions(SIZE)
   var grid = _gen_winning_path(SIZE, positions[0], positions[1])
-  for row in grid:
-    for cell in row: 
+  for y in grid.size():
+    var row = grid[y]
+    for x in row.size(): 
+      var cell = row[x]
       if cell != null:
-        add_child(cell.to_room())
-        breakpoint
-        return
+        var room = cell.to_room()
+        var room_wall = room.get_node("RoomWall")
+        room.position.x = x * (room_wall.WALL_SIZE + 32.0)
+        room.position.y = y * (room_wall.WALL_SIZE + 32.0)
+        add_child(room)
 
 

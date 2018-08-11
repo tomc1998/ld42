@@ -1,7 +1,7 @@
 ## This is a script for a 'RoomWall', which is used to construct a room. It has
 ## a parameter to control which sides of the room have doors.
 
-extends StaticBody2D
+extends Node2D
 
 const WALL_SPRITESHEET = preload("res://assets/art/dungeon/walls.png")
 
@@ -74,22 +74,40 @@ func _construct_wall(pos, dir, is_door):
   var wall_nor_cc = _get_dir_as_vec(_get_dir_normal_cc(dir))
   if !is_door:
     var sprite = _get_wall_sprite(dir);
+    var wall = StaticBody2D.new()
     sprite.apply_scale((wall_nor_cc * WALL_SIZE / 16.0 + _get_dir_as_vec(dir)).abs())
-    sprite.position = pos;
-    add_child(sprite)
+    wall.position = pos;
+    wall.add_child(sprite)
+    add_child(wall)
+    var shape_owner = wall.create_shape_owner(wall)
+    var shape = RectangleShape2D.new()
+    shape.set_extents((wall_nor_cc * WALL_SIZE + _get_dir_as_vec(dir)).abs() / 2.0)
+    wall.shape_owner_add_shape(shape_owner, shape)
   else:
     # Construct 2 walls, of size (WALL_SIZE - DOOR_SIZE)/2
     var wall_size = (WALL_SIZE - DOOR_SIZE)/2.0
 
     var sprite = _get_wall_sprite(dir);
+    var wall = StaticBody2D.new()
     sprite.apply_scale((wall_nor_cc * wall_size / 16.0 + _get_dir_as_vec(dir)).abs())
-    sprite.position = pos + wall_nor_cc * (DOOR_SIZE / 2.0 + wall_size / 2.0);
-    add_child(sprite)
+    wall.position = pos + wall_nor_cc * (DOOR_SIZE / 2.0 + wall_size / 2.0);
+    wall.add_child(sprite)
+    add_child(wall)
+    var shape_owner = wall.create_shape_owner(wall)
+    var shape = RectangleShape2D.new()
+    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir)).abs() / 2.0)
+    wall.shape_owner_add_shape(shape_owner, shape)
 
     sprite = _get_wall_sprite(dir);
+    wall = StaticBody2D.new()
     sprite.apply_scale((wall_nor_cc * wall_size / 16.0 + _get_dir_as_vec(dir)).abs())
-    sprite.position = pos + wall_nor * (DOOR_SIZE / 2.0 + wall_size / 2.0);
-    add_child(sprite)
+    wall.position = pos + wall_nor * (DOOR_SIZE / 2.0 + wall_size / 2.0);
+    wall.add_child(sprite)
+    add_child(wall)
+    shape_owner = wall.create_shape_owner(wall)
+    shape = RectangleShape2D.new()
+    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir)).abs() / 2.0)
+    wall.shape_owner_add_shape(shape_owner, shape)
 
 func _ready():
   _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, true)

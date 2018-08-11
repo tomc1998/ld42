@@ -4,6 +4,7 @@
 extends Node2D
 
 const WALL_SPRITESHEET = preload("res://assets/art/dungeon/walls.png")
+const FLOOR_SPRITESHEET = preload("res://assets/art/dungeon/floor.png")
 
 const DOOR_SIZE = 32.0
 const WALL_SIZE = 256.0
@@ -45,6 +46,14 @@ func _get_wall_sprite(dir, invert=false):
   elif dir == TOP    | LEFT:  sprite.region_rect = Rect2(0,  32, 16, 16)
   else: breakpoint
 
+  return sprite
+
+# Create a random floor sprite node
+func _get_floor_sprite():
+  var sprite = Sprite.new()
+  sprite.region_enabled = true
+  sprite.set_texture(FLOOR_SPRITESHEET)
+  sprite.region_rect = Rect2(0, 0, 16, 16)
   return sprite
 
 # Return the direction at 90 degrees (anti-clockwise) to the given one - i.e. LEFT will
@@ -135,18 +144,30 @@ func _construct_wall(pos, dir, is_door):
     wall.shape_owner_add_shape(shape_owner, shape)
 
 func _construct_wall_corner(pos, dir):
-    var sprite = _get_wall_sprite(dir, true);
-    var wall = StaticBody2D.new()
-    wall.position = pos;
-    wall.add_child(sprite)
-    add_child(wall)
-    var shape_owner = wall.create_shape_owner(wall)
-    var shape = RectangleShape2D.new()
-    shape.set_extents(Vector2(8, 8))
-    wall.shape_owner_add_shape(shape_owner, shape)
+  var sprite = _get_wall_sprite(dir, true);
+  var wall = StaticBody2D.new()
+  wall.position = pos;
+  wall.add_child(sprite)
+  add_child(wall)
+  var shape_owner = wall.create_shape_owner(wall)
+  var shape = RectangleShape2D.new()
+  shape.set_extents(Vector2(8, 8))
+  wall.shape_owner_add_shape(shape_owner, shape)
 
+# Fill the floor with sprite tiles
+func _construct_floor():
+  var rows = WALL_SIZE / 16.0 + 2.0
+  for x in range(rows):
+    for y in range(rows):
+      # Don't create tiles on corners
+      if (x == 0 || x == rows - 1) && (y == 0 || y == rows - 1): continue
+      var sprite = _get_floor_sprite()
+      sprite.position.x = x * 16.0 - WALL_SIZE_2 - 8.0
+      sprite.position.y = y * 16.0 - WALL_SIZE_2 - 8.0
+      add_child(sprite)
 
 func _ready():
+  _construct_floor()
   _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, has_doors & RIGHT > 0)
   _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, has_doors & BOTTOM > 0)
   _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, has_doors & LEFT > 0)

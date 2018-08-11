@@ -10,6 +10,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="RoomWall" parent="." index="0" instance=ExtResource( 1 )]
 
 position = Vector2( 310.511, 204.998 )
+has_doors = 7
 
 [node name="Player" parent="." index="1" instance=ExtResource( 2 )]
 

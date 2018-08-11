@@ -17,6 +17,12 @@ var state = STATE_IDLE
 
 var jump_target
 
+export(int) var max_health = 5
+var health = max_health
+
+# Additional force applied other than walking
+var knockback = Vector2(0,0)
+
 const CHARGE_TIME = 0.8
 var charge_counter = CHARGE_TIME
 
@@ -41,6 +47,17 @@ func _process(delta):
     else:
       move_and_slide((jump_target - position).normalized() * JUMP_SPEED)
 
+  move_and_slide(knockback)
+  knockback *= 0.9
+
+  if knockback.length_squared() > 100.0:
+    self.modulate.r = 1
+    self.modulate.g = 0.1
+    self.modulate.b = 0.1
+  else:
+    self.modulate.r = 0
+    self.modulate.g = 0.5
+    self.modulate.b = 1
 
 func _ready():
   anim_player.play("idle")
@@ -50,3 +67,10 @@ func on_body_entered(body):
   if body.has_method("damage"):
     body.callv("damage", [DAMAGE, (body.position - position).normalized() * 300])
   state = STATE_IDLE
+
+# Damage this entity and push it back on the given knockback vec
+func damage(amount, knockback_vec):
+  self.knockback += knockback_vec
+  self.health -= amount
+  if self.health <= 0:
+    queue_free()

@@ -1,5 +1,7 @@
 extends Area2D
 
+const DAMAGE = 1
+
 const FireParticle = preload("res://scenes/fx/FireParticle.tscn")
 
 const FIRE_PARTICLE_SPEED = 180.0
@@ -19,6 +21,8 @@ func set_dir(vec):
   self.rotation = _dir.angle()
 
 func _on_Fireball_body_entered(body):
+  if body.has_method("damage"):
+    body.callv("damage", [DAMAGE, (body.position - position).normalized() * 200])
   for i in range(24):
     var particle = FireParticle.instance()
     var vel = Vector2(rand_range(-1, 1), rand_range(-1, 1)).normalized() * \

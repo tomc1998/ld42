@@ -70,21 +70,30 @@ func _get_dir_as_vec(dir):
 # BOTTOM).
 func _construct_wall(pos, dir, is_door):
   # If this isn't a door, this is easy to construct
+  var wall_nor = _get_dir_as_vec(_get_dir_normal(dir))
+  var wall_nor_cc = _get_dir_as_vec(_get_dir_normal_cc(dir))
   if !is_door:
     var sprite = _get_wall_sprite(dir);
-    var scale = _get_dir_as_vec(_get_dir_normal_cc(dir)) * WALL_SIZE / 16.0 \
-                    + _get_dir_as_vec(dir)
-    scale.x = abs(scale.x)
-    scale.y = abs(scale.y)
-    sprite.apply_scale(scale)
-    sprite.offset = pos;
-    print(sprite.offset)
-    print(sprite.scale)
+    sprite.apply_scale((wall_nor_cc * WALL_SIZE / 16.0 + _get_dir_as_vec(dir)).abs())
+    sprite.position = pos;
+    add_child(sprite)
+  else:
+    # Construct 2 walls, of size (WALL_SIZE - DOOR_SIZE)/2
+    var wall_size = (WALL_SIZE - DOOR_SIZE)/2.0
+
+    var sprite = _get_wall_sprite(dir);
+    sprite.apply_scale((wall_nor_cc * wall_size / 16.0 + _get_dir_as_vec(dir)).abs())
+    sprite.position = pos + wall_nor_cc * (DOOR_SIZE / 2.0 + wall_size / 2.0);
+    add_child(sprite)
+
+    sprite = _get_wall_sprite(dir);
+    sprite.apply_scale((wall_nor_cc * wall_size / 16.0 + _get_dir_as_vec(dir)).abs())
+    sprite.position = pos + wall_nor * (DOOR_SIZE / 2.0 + wall_size / 2.0);
     add_child(sprite)
 
 func _ready():
-  _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, false)
-  _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, false)
-  _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, false)
-  _construct_wall(Vector2(0, -WALL_SIZE_2 - 8.0), BOTTOM, false)
+  _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, true)
+  _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, true)
+  _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, true)
+  _construct_wall(Vector2(0, -WALL_SIZE_2 - 8.0), BOTTOM, true)
 

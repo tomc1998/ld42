@@ -92,6 +92,8 @@ func _construct_wall(pos, dir, is_door):
   var wall_nor_cc = _get_dir_as_vec(_get_dir_normal_cc(dir))
   if !is_door:
     var wall = StaticBody2D.new()
+    wall.set_collision_layer_bit(0, false)
+    wall.set_collision_layer_bit(20, true)
     # Add wall sprite
     var sprite = _get_wall_sprite(dir);
     sprite.apply_scale((wall_nor_cc * WALL_SIZE / 16.0 + _get_dir_as_vec(dir)).abs())

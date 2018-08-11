@@ -1,7 +1,11 @@
 extends KinematicBody2D
 
+const Fireball = preload("res://scenes/Fireball.tscn")
+
 export var speed = 60
 export var sprint_modifier = 1.8
+
+onready var world = get_node("/root/World")
 
 # Given a movement vector, set the current animation of the animation player.
 func _set_anim(move_vec, sprinting):
@@ -39,3 +43,14 @@ func _physics_process(delta):
       move_vec *= sprint_modifier
   _set_anim(move_vec, sprinting)
   move_and_slide(move_vec)
+
+  # Check for fireball shooting
+  if Input.is_action_just_pressed("primary"):
+    _shoot_fireball(get_global_mouse_position())
+
+func _shoot_fireball(target):
+  var vec = (target - self.position).normalized()
+  var fireball = Fireball.instance()
+  fireball.set_dir(vec)
+  fireball.position = position + vec * 8.0
+  world.add_child(fireball)

@@ -7,6 +7,7 @@ const Tunnel = preload("res://scenes/Tunnel.tscn")
 
 const WALL_SPRITESHEET = preload("res://assets/art/dungeon/walls.png")
 const FLOOR_SPRITESHEET = preload("res://assets/art/dungeon/floor.png")
+const MIN_SIZE = 64.0
 
 const DOOR_SIZE = 32.0
 const WALL_SIZE = 256.0

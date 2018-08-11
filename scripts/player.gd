@@ -50,16 +50,17 @@ func _physics_process(delta):
     _shoot_fireball(get_global_mouse_position())
 
 func _shoot_fireball(target):
-  var vec = (target - self.position).normalized()
-  var fireball = Fireball.instance()
-  fireball.set_dir(vec)
-  fireball.position = position + vec * 8.0
-  world.add_child(fireball)
-  _shrink_curr_room(20.0);
-
+  if _shrink_curr_room(20.0):
+    var vec = (target - self.position).normalized()
+    var fireball = Fireball.instance()
+    fireball.set_dir(vec)
+    fireball.position = position + vec * 8.0
+    world.add_child(fireball)
 
 # Find the room we're currently in (linear search) and shrink that one by the
 # given amount.
+# Returns false if the room is too small already, or if we couldn't find a room
+# that we were in to shrink.
 func _shrink_curr_room(amount):
   # Find the room
   for r in world.get_node("DungeonGenerator").get_children():
@@ -70,7 +71,10 @@ func _shrink_curr_room(amount):
       var room_rect = Rect2(r.position - room_size / 2.0, room_size)
       if room_rect.has_point(position):
         print("Shrinking")
-        room_wall.shrink(amount)
-        return
+        if room_wall.target_size - amount < room_wall.MIN_SIZE: return false
+        else:
+          room_wall.shrink(amount)
+          return true
+  return false
 
         

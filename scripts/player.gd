@@ -68,7 +68,6 @@ func _shrink_curr_room(amount):
       var room_wall = r.get_node("RoomWall")
       var room_size = Vector2(room_wall.size, room_wall.size)
       var room_rect = Rect2(r.position - room_size / 2.0, room_size)
-      print(room_rect)
       if room_rect.has_point(position):
         print("Shrinking")
         room_wall.shrink(amount)

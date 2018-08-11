@@ -61,7 +61,7 @@ export(int, FLAGS, "Left", "Top", "Right", "Bottom") var has_doors
 # 2 corner tiles, one which has the corner 'pointing inwards', and one which has
 # 2 wall faces 'pointing outwards'. The first would be inverted, the second is
 # just normal.
-func _get_wall_sprite(dir, invert=false):
+static func _get_wall_sprite(dir, invert=false):
   var sprite = Sprite.new()
   sprite.region_enabled = true
   sprite.set_texture(WALL_SPRITESHEET)
@@ -83,7 +83,7 @@ func _get_wall_sprite(dir, invert=false):
   return sprite
 
 # Create a random floor sprite node
-func _get_floor_sprite():
+static func _get_floor_sprite():
   var sprite = Sprite.new()
   sprite.region_enabled = true
   sprite.set_texture(FLOOR_SPRITESHEET)
@@ -109,12 +109,20 @@ func _get_dir_normal(dir):
     BOTTOM: return LEFT
 
 # Given a dir, get a unit vector for that directoin
-func _get_dir_as_vec(dir):
+static func _get_dir_as_vec(dir):
   match dir:
     LEFT:   return Vector2(-1,  0)
     TOP:    return Vector2( 0, -1)
     RIGHT:  return Vector2( 1,  0)
     BOTTOM: return Vector2( 0,  1)
+
+static func _get_vec_as_dir(dir):
+  if dir == Vector2(1, 0): return RIGHT
+  elif dir == Vector2(-1, 0): return LEFT
+  elif dir == Vector2(0, 1): return BOTTOM
+  elif dir == Vector2(0, -1): return TOP
+  else: breakpoint
+
 
 # Construct a wall from the given start pos, in the given direction.
 # `pos` should be the center of the wall to create.
@@ -203,6 +211,7 @@ func _construct_tunnels():
       tunnel.position = _get_dir_as_vec(dir) * (WALL_SIZE_2 + 32.0)
       tunnel.dir = -_get_dir_as_vec(dir)
       add_child(tunnel)
+      tunnels.append(tunnel)
 
 func _ready():
   _construct_floor()
@@ -273,6 +282,8 @@ func _set_size(size):
   self.size = size;
   _cull_floor_tiles()
   _shrink_walls()
+  for t in self.tunnels:
+    t.set_size((WALL_SIZE - size)/2)
 
 func shrink(amount):
   self.target_size -= amount

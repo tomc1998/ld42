@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+const FIREBALL_COST = 3.0
+
 const Fireball = preload("res://scenes/Fireball.tscn")
 const Room = preload("res://scenes/Room.tscn")
 
@@ -50,7 +52,7 @@ func _physics_process(delta):
     _shoot_fireball(get_global_mouse_position())
 
 func _shoot_fireball(target):
-  if _shrink_curr_room(20.0):
+  if _shrink_curr_room(FIREBALL_COST):
     var vec = (target - self.position).normalized()
     var fireball = Fireball.instance()
     fireball.set_dir(vec)

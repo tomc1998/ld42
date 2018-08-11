@@ -18,10 +18,9 @@ const TOP    = 2
 const RIGHT  = 4
 const BOTTOM = 8
 
-var size = WALL_SIZE
-var target_size = WALL_SIZE
-#const SHRINK_SPEED = 12.0
-const SHRINK_SPEED = 100.0
+var size = WALL_SIZE - 2.0
+var target_size = size
+const SHRINK_SPEED = 12.0
 
 # Meta-data for walls, for when we're shrinking rooms
 class WallMeta:
@@ -226,7 +225,7 @@ func _ready():
   _construct_wall_corner(Vector2( WALL_SIZE_2 + 8.0,  WALL_SIZE_2 + 8.0), LEFT | TOP)
   _construct_wall_corner(Vector2(-WALL_SIZE_2 - 8.0,  WALL_SIZE_2 + 8.0), RIGHT | TOP)
 
-  _set_size(256.0)
+  _set_size(size)
 
 # Remove floor tiles which exceed the size bounds
 func _cull_floor_tiles():

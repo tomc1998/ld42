@@ -31,5 +31,6 @@ primary=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource
 
 [rendering]
 
-environment/default_clear_color=Color( 0.0664062, 0.0664062, 0.0664062, 1 )
+quality/2d/use_pixel_snap=true
+environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"

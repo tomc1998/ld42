@@ -33,20 +33,20 @@ func _construct_floor():
   var columns
   if dir.x == 0: # Verti tunnel
     rows = MAX_TUNNEL_SIZE / 16.0
-    columns = TUNNEL_WIDTH / 16.0
+    columns = TUNNEL_WIDTH / 16.0 + 2
   else:
     columns = MAX_TUNNEL_SIZE / 16.0
-    rows = TUNNEL_WIDTH / 16.0
+    rows = TUNNEL_WIDTH / 16.0 + 2
 
   for x in range(columns):
     for y in range(rows):
       var sprite = RoomWall._get_floor_sprite()
       sprite.position.x = \
-        (16.0 * x * dir.x) if dir.x != 0 \
-        else (-TUNNEL_WIDTH / 2 + 16.0 * x + 8.0)
+        (16.0 * (x+1.5) * dir.x) if dir.x != 0 \
+        else (-TUNNEL_WIDTH / 2 - 16.0 + 16.0 * x + 8.0)
       sprite.position.y = \
-        (16.0 * y * dir.y) if dir.y != 0 \
-        else (-TUNNEL_WIDTH / 2 + 16.0 * y + 8.0)
+        (16.0 * (y+1.5) * dir.y) if dir.y != 0 \
+        else (-TUNNEL_WIDTH / 2 - 16.0 + 16.0 * y + 8.0)
       add_child(sprite)
       floors.append(sprite)
 

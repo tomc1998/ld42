@@ -3,6 +3,8 @@
 
 extends Node2D
 
+const Tunnel = preload("res://scenes/Tunnel.tscn")
+
 const WALL_SPRITESHEET = preload("res://assets/art/dungeon/walls.png")
 const FLOOR_SPRITESHEET = preload("res://assets/art/dungeon/floor.png")
 
@@ -17,7 +19,8 @@ const BOTTOM = 8
 
 var size = WALL_SIZE
 var target_size = WALL_SIZE
-const SHRINK_SPEED = 12.0
+#const SHRINK_SPEED = 12.0
+const SHRINK_SPEED = 100.0
 
 # Meta-data for walls, for when we're shrinking rooms
 class WallMeta:
@@ -42,6 +45,9 @@ var floors = []
 var walls = []
 # TOP LEFT, TOP RIGHT, BOTTOM RIGHT, BOTTOM LEFT corners
 var corners = []
+#  A list of the tunnels connected to the doors of this room. There are always 2
+#  distinct tunnel objects per tunnel - they're shared by the rooms.
+var tunnels = []
 
 # Enum for which walls have doors
 export(int, FLAGS, "Left", "Top", "Right", "Bottom") var has_doors
@@ -189,8 +195,18 @@ func _construct_floor():
       add_child(sprite)
       floors.append(sprite)
 
+func _construct_tunnels():
+  var dirs = [LEFT, TOP, RIGHT, BOTTOM]
+  for dir in dirs:
+    if has_doors & dir > 0:
+      var tunnel = Tunnel.instance()
+      tunnel.position = _get_dir_as_vec(dir) * (WALL_SIZE_2 + 32.0)
+      tunnel.dir = -_get_dir_as_vec(dir)
+      add_child(tunnel)
+
 func _ready():
   _construct_floor()
+  _construct_tunnels()
   _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, has_doors & LEFT > 0)
   _construct_wall(Vector2(0, -WALL_SIZE_2 - 8.0), BOTTOM, has_doors & TOP > 0)
   _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, has_doors & RIGHT > 0)

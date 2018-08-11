@@ -15,6 +15,32 @@ const TOP    = 2
 const RIGHT  = 4
 const BOTTOM = 8
 
+var size = WALL_SIZE
+
+# Meta-data for walls, for when we're shrinking rooms
+class WallMeta:
+  var dir
+  # The normal of the direction. This is used for door walls, where one wall is
+  # on one side and is effectively mirrored. This means we can loopover the
+  # walls and just use the wall normals, rather than a shit load of
+  # if-statements with the dir.
+  # This should either be the _get_dir_normal(dir) or _get_dir_normal_cc(dir).
+  # The choice effects how the wall corner tile scales - one is correct, one
+  # isn't.
+  var nor
+  var wall
+  func _init(wall, dir, nor):
+    self.wall = wall
+    self.dir = dir
+    self.nor = nor
+
+# Floor tiles
+var floors = []
+# All walls. Walls with a door count as 2 separate walls.
+var walls = []
+# TOP LEFT, TOP RIGHT, BOTTOM RIGHT, BOTTOM LEFT corners
+var corners = []
+
 # Enum for which walls have doors
 export(int, FLAGS, "Left", "Top", "Right", "Bottom") var has_doors
 
@@ -96,54 +122,45 @@ func _construct_wall(pos, dir, is_door):
     wall.set_collision_layer_bit(20, true)
     # Add wall sprite
     var sprite = _get_wall_sprite(dir);
-    sprite.apply_scale((wall_nor_cc * WALL_SIZE / 16.0 + _get_dir_as_vec(dir)).abs())
     wall.add_child(sprite)
     # Offset wall & add collision
     wall.position = pos;
-    add_child(wall)
     var shape_owner = wall.create_shape_owner(wall)
     var shape = RectangleShape2D.new()
-    shape.set_extents((wall_nor_cc * WALL_SIZE + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
+    walls.append(WallMeta.new(wall, dir, wall_nor))
+    add_child(wall)
   else:
     # Construct 2 walls, of size (WALL_SIZE - DOOR_SIZE)/2
-    var wall_size = (WALL_SIZE - DOOR_SIZE)/2.0
 
     var wall = StaticBody2D.new()
     # Add wall sprite
     var sprite = _get_wall_sprite(dir);
-    sprite.apply_scale((wall_nor_cc * (wall_size - DOOR_SIZE/4.0) / 16.0 + _get_dir_as_vec(dir)).abs())
-    sprite.offset = wall_nor_cc * DOOR_SIZE/4.0 / sprite.scale
     wall.add_child(sprite)
     # Add corner for door
     sprite = _get_wall_sprite(dir | _get_dir_normal(dir));
-    sprite.offset = wall_nor * (wall_size/2.0 - DOOR_SIZE/4.0) / sprite.scale
     wall.add_child(sprite)
-    # Offset wall & add collision
-    wall.position = pos + wall_nor_cc * (DOOR_SIZE / 2.0 + wall_size / 2.0);
-    add_child(wall)
+    # add collision
     var shape_owner = wall.create_shape_owner(wall)
     var shape = RectangleShape2D.new()
-    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
+    walls.append(WallMeta.new(wall, dir, wall_nor))
+    add_child(wall)
 
     wall = StaticBody2D.new()
     # Add wall sprite
     sprite = _get_wall_sprite(dir);
-    sprite.apply_scale((wall_nor_cc * (wall_size - DOOR_SIZE/4.0) / 16.0 + _get_dir_as_vec(dir)).abs())
-    sprite.offset = wall_nor * DOOR_SIZE/4.0 / sprite.scale
     wall.add_child(sprite)
     # Add corner for door
     sprite = _get_wall_sprite(dir | _get_dir_normal_cc(dir));
-    sprite.offset = wall_nor_cc * (wall_size/2.0 - DOOR_SIZE/4.0) / sprite.scale
     wall.add_child(sprite)
     # Offset wall & add collision
-    wall.position = pos + wall_nor * (DOOR_SIZE / 2.0 + wall_size / 2.0);
-    add_child(wall)
     shape_owner = wall.create_shape_owner(wall)
     shape = RectangleShape2D.new()
-    shape.set_extents((wall_nor_cc * wall_size + _get_dir_as_vec(dir) * 16.0).abs() / 2.0)
     wall.shape_owner_add_shape(shape_owner, shape)
+    walls.append(WallMeta.new(wall, dir, wall_nor_cc))
+    add_child(wall)
+
 
 func _construct_wall_corner(pos, dir):
   var sprite = _get_wall_sprite(dir, true);
@@ -155,6 +172,7 @@ func _construct_wall_corner(pos, dir):
   var shape = RectangleShape2D.new()
   shape.set_extents(Vector2(8, 8))
   wall.shape_owner_add_shape(shape_owner, shape)
+  corners.append(wall)
 
 # Fill the floor with sprite tiles
 func _construct_floor():
@@ -167,15 +185,73 @@ func _construct_floor():
       sprite.position.x = x * 16.0 - WALL_SIZE_2 - 8.0
       sprite.position.y = y * 16.0 - WALL_SIZE_2 - 8.0
       add_child(sprite)
+      floors.append(sprite)
 
 func _ready():
   _construct_floor()
-  _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, has_doors & RIGHT > 0)
-  _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, has_doors & BOTTOM > 0)
   _construct_wall(Vector2(-WALL_SIZE_2 - 8.0, 0), RIGHT, has_doors & LEFT > 0)
   _construct_wall(Vector2(0, -WALL_SIZE_2 - 8.0), BOTTOM, has_doors & TOP > 0)
+  _construct_wall(Vector2(WALL_SIZE_2 + 8.0, 0),  LEFT, has_doors & RIGHT > 0)
+  _construct_wall(Vector2(0, WALL_SIZE_2 + 8.0),  TOP, has_doors & BOTTOM > 0)
   _construct_wall_corner(Vector2(-WALL_SIZE_2 - 8.0, -WALL_SIZE_2 - 8.0), RIGHT | BOTTOM)
-  _construct_wall_corner(Vector2(-WALL_SIZE_2 - 8.0,  WALL_SIZE_2 + 8.0), RIGHT | TOP)
   _construct_wall_corner(Vector2( WALL_SIZE_2 + 8.0, -WALL_SIZE_2 - 8.0), LEFT | BOTTOM)
   _construct_wall_corner(Vector2( WALL_SIZE_2 + 8.0,  WALL_SIZE_2 + 8.0), LEFT | TOP)
+  _construct_wall_corner(Vector2(-WALL_SIZE_2 - 8.0,  WALL_SIZE_2 + 8.0), RIGHT | TOP)
 
+  _set_size(rand_range(64.0, 256.0))
+
+# Remove floor tiles which exceed the size bounds
+func _cull_floor_tiles():
+  var size_rect = Rect2(position - Vector2(size, size)/2.0, Vector2(size, size))
+  for f in floors:
+    var floor_rect = Rect2(f.position - Vector2(8.0, 8.0), Vector2(16.0, 16.0))
+    if !floor_rect.intersects(size_rect):
+      f.visible = false
+
+func _shrink_wall(wall):
+  # Change position first
+  var pos_vec = -_get_dir_as_vec(wall.dir)
+  wall.wall.position = position + pos_vec * size / 2.0 + pos_vec * 8.0
+  
+  if wall.wall.get_children().size() == 1:
+    var sprite = wall.wall.get_children()[0]
+    # Easy, just scale down
+    sprite.scale = pos_vec.abs() + wall.nor.abs() * size / 16
+    # # Scale collisions
+    var shape_owner = wall.wall.get_shape_owners()[0]
+    var rect = wall.wall.shape_owner_get_shape(shape_owner, 0)
+    rect.extents = (pos_vec * 16.0 + wall.nor * size).abs() / 2.0
+  if wall.wall.get_children().size() == 2:
+    # Add offset to the right / left along wall normal
+    wall.wall.position -= wall.nor * (size / 4 + DOOR_SIZE/2)
+    var sprite = wall.wall.get_children()[0]
+    # More complex, as this is a door wall. Consists of 2 sprites - first sprite is a
+    # wall, 2nd is a corner sprite which is next to the door.
+    # First, scale the wall down
+    sprite.scale = pos_vec.abs() + wall.nor.abs() * (size / 2 - DOOR_SIZE) / 16
+    # Then, do the corner sprite.
+    var corner = wall.wall.get_children()[1]
+    corner.position = wall.nor * (size / 4.0 - 16.0)
+    # # Scale collisions
+    var shape_owner = wall.wall.get_shape_owners()[0]
+    var rect = wall.wall.shape_owner_get_shape(shape_owner, 0)
+    rect.extents = (pos_vec * 16.0 + wall.nor * (size / 2 - DOOR_SIZE / 2)).abs() / 2.0
+
+# Shrink walls down to size
+func _shrink_walls():
+  var size_vec = Vector2(size, size)
+  # Shrink corners
+  corners[0].position = position + Vector2(-size, -size) / 2.0 + Vector2(-8.0, -8.0)
+  corners[1].position = position + Vector2(size,  -size) / 2.0 + Vector2( 8.0, -8.0)
+  corners[2].position = position + Vector2(size,   size) / 2.0 + Vector2( 8.0,  8.0)
+  corners[3].position = position + Vector2(-size,  size) / 2.0 + Vector2(-8.0,  8.0)
+
+  for w in walls: _shrink_wall(w)
+
+# Change the size of the floor.
+func _set_size(size):
+  # Enlargment unsupported!
+  assert(self.size >= size)
+  self.size = size;
+  _cull_floor_tiles()
+  _shrink_walls()

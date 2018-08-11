@@ -19,6 +19,8 @@ func _construct_walls():
   var normals = [dir.tangent(), -dir.tangent()]
   for nor in normals:
     var wall = StaticBody2D.new()
+    wall.set_collision_layer_bit(0, false)
+    wall.set_collision_layer_bit(19, true)
     wall.position = dir * MAX_TUNNEL_SIZE / 2 + nor * (TUNNEL_WIDTH / 2.0 + 8.0)
     print(-nor)
     print(RoomWall._get_vec_as_dir(-nor))

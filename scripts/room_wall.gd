@@ -135,7 +135,7 @@ func _construct_wall(pos, dir, is_door):
   if !is_door:
     var wall = StaticBody2D.new()
     wall.set_collision_layer_bit(0, false)
-    wall.set_collision_layer_bit(20, true)
+    wall.set_collision_layer_bit(19, true)
     # Add wall sprite
     var sprite = _get_wall_sprite(dir);
     wall.add_child(sprite)
@@ -150,6 +150,8 @@ func _construct_wall(pos, dir, is_door):
     # Construct 2 walls, of size (WALL_SIZE - DOOR_SIZE)/2
 
     var wall = StaticBody2D.new()
+    wall.set_collision_layer_bit(0, false)
+    wall.set_collision_layer_bit(19, true)
     # Add wall sprite
     var sprite = _get_wall_sprite(dir);
     wall.add_child(sprite)
@@ -164,6 +166,8 @@ func _construct_wall(pos, dir, is_door):
     add_child(wall)
 
     wall = StaticBody2D.new()
+    wall.set_collision_layer_bit(0, false)
+    wall.set_collision_layer_bit(19, true)
     # Add wall sprite
     sprite = _get_wall_sprite(dir);
     wall.add_child(sprite)

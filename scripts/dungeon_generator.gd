@@ -146,6 +146,6 @@ func _ready():
         room.position.y = y * (room_wall.WALL_SIZE + 32.0)
         add_child(room)
         # Set the player's starting position
-        if cell.is_start:
-          player.position = room.position
+        # if cell.is_start:
+        #   player.position = room.position
 

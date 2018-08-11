@@ -5,7 +5,7 @@ const FireParticle = preload("res://scenes/fx/FireParticle.tscn")
 const FIRE_PARTICLE_SPEED = 180.0
 const FIRE_PARTICLE_VARIATION = 80.0
 
-const FIREBALL_SPEED = 280.0
+const FIREBALL_SPEED = 380.0
 
 onready var world = get_node("/root/World")
 

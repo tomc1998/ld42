@@ -4,6 +4,7 @@ const Room = preload("res://scenes/Room.tscn")
 const RoomWall = preload("res://scenes/RoomWall.tscn")
 
 onready var world = get_node("/root/World")
+onready var player = world.get_node("Player")
 
 const SIZE = 4
 
@@ -147,5 +148,7 @@ func _ready():
         room.position.x = x * (room_wall.WALL_SIZE + 32.0)
         room.position.y = y * (room_wall.WALL_SIZE + 32.0)
         add_child(room)
-
+        # Set the player's starting position
+        if cell.is_start:
+          player.position = room.position
 

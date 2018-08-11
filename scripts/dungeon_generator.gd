@@ -124,9 +124,12 @@ func _gen_winning_path(size, start, end):
 func _gen_positions(size):
   assert(size >= 4)
   var start = Vector2(floor(rand_range(0, size)), floor(rand_range(0, size)))
-  var end = start
+  var end = Vector2(floor(rand_range(0, size)), floor(rand_range(0, size)))  
   while end == start || start.distance_to(end) < 3:
+    start = Vector2(floor(rand_range(0, 1)), floor(rand_range(0, size)))
     end = Vector2(floor(rand_range(0, size)), floor(rand_range(0, size)))  
+  print(start)
+  print(end)
   return [start, end]
 
 func _ready():

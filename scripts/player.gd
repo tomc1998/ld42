@@ -38,4 +38,4 @@ func _physics_process(delta):
       sprinting = true
       move_vec *= sprint_modifier
   _set_anim(move_vec, sprinting)
-  move_and_collide(move_vec * delta)
+  move_and_slide(move_vec)

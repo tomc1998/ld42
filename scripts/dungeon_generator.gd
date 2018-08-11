@@ -1,5 +1,10 @@
 extends Node
 
+const Room = preload("res://scenes/Room.tscn")
+const RoomWall = preload("res://scenes/RoomWall.tscn")
+
+onready var world = get_node("/root/World")
+
 const SIZE = 4
 
 const LEFT = 0
@@ -29,6 +34,17 @@ class GridRoom:
   var connections = [false, false, false, false]
   var is_start = false
   var is_end = false
+
+  # converts this gridroom to a Room scene.
+  func to_room():
+    var room = Room.instance()
+    var room_wall = room.get_node("RoomWall")
+    if self.connections[LEFT]: room_wall.has_doors |= room_wall.LEFT
+    if self.connections[TOP]: room_wall.has_doors |= room_wall.TOP
+    if self.connections[RIGHT]: room_wall.has_doors |= room_wall.RIGHT
+    if self.connections[BOTTOM]: room_wall.has_doors |= room_wall.BOTTOM
+    return room
+
 
 # # Given a size, returns a matrix of GridRoom objects (or null) containing rooms.
 # # Rooms will always be hori / verti adjacent. Matrix is a list of lists.
@@ -119,9 +135,10 @@ func _ready():
   var positions = _gen_positions(SIZE)
   var grid = _gen_winning_path(SIZE, positions[0], positions[1])
   for row in grid:
-    var line = ""
-    for cell in row:
-      if cell == null: line += "0 "
-      else: line += "1 "
-    print(line)
+    for cell in row: 
+      if cell != null:
+        add_child(cell.to_room())
+        breakpoint
+        return
+
 

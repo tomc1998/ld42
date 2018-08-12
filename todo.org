@@ -1,0 +1,22 @@
+* Necessary
+** TODO One more enemy type
+** TODO One more spell type
+** TODO Scoring
+** TODO UI
+*** TODO Menus
+*** TODO High scores
+*** TODO Gameover
+** TODO Music
+** TODO SFX
+** TODO Player art
+** TODO Fix tunnel collisions
+
+* Quite nice to have
+** TODO Another enemy type
+** TODO Another spell type
+** TODO A 'dash'?
+
+* Stretch
+** TODO Ending?
+** TODO Powerups / upgrades
+*** TODO Bouncy fireballs?

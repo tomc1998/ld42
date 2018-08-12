@@ -2,8 +2,8 @@
 ** DONE Health pickups
 ** TODO One more enemy type
 ** TODO One more spell type
-** TODO Hold primary to shoot multiple spells
-** TODO Spell animation
+** DONE Hold primary to shoot multiple spells
+** DONE Spell animation
 ** DONE Score multiplier
 ** DONE Scoring
 ** DONE UI

@@ -4,7 +4,7 @@
 [ext_resource path="res://scripts/firecharge.gd" type="Script" id=2]
 [ext_resource path="res://assets/art/firecharge/charge.tres" type="Animation" id=3]
 
-[node name="Firecharge" type="Sprite" index="0"]
+[node name="Firecharge" type="Sprite"]
 
 texture = ExtResource( 1 )
 vframes = 2

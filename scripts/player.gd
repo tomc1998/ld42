@@ -3,13 +3,16 @@ extends "creature.gd"
 signal health_changed(health)
 signal max_health_changed(max_health)
 
+var FIREBALL_RELOAD_TIME = 0.3
+var primary_reload_timer = 0.0
+
 const FIREBALL_COST = 3.0
 
 const Firecharge = preload("res://scenes/fx/Firecharge.tscn")
 const Room = preload("res://scenes/Room.tscn")
 
 export var speed = 60
-export var sprint_modifier = 4.8
+export var sprint_modifier = 2.4
 
 onready var world = get_node("/root/World")
 
@@ -51,18 +54,28 @@ func _physics_process(delta):
   if Input.is_action_pressed("move_right"): move_vec.x = speed
   if Input.is_action_pressed("move_up"): move_vec.y = -speed
   if Input.is_action_pressed("move_down"): move_vec.y = speed
-  if Input.is_action_pressed("sprint"):
-    if !(move_vec.x == 0 && move_vec.y == 0):
-      sprinting = true
-      move_vec *= sprint_modifier
+  # if Input.is_action_pressed("sprint"):
+  #   if !(move_vec.x == 0 && move_vec.y == 0):
+  #     sprinting = true
+  #     move_vec *= sprint_modifier
+  # Just sprint by default for now
+  sprinting = true
+  move_vec *= sprint_modifier
   _set_anim(move_vec, sprinting)
   move_and_slide(move_vec)
 
   ._process(delta)
 
-  # Check for fireball shooting
-  if Input.is_action_just_pressed("primary"):
-    _shoot_fireball(get_global_mouse_position())
+  # Reload
+  if primary_reload_timer > 0:
+    primary_reload_timer -= delta
+    if primary_reload_timer <= 0:
+      primary_reload_timer = 0.0
+  else:
+    # Check for fireball shooting
+    if Input.is_action_pressed("primary"):
+      primary_reload_timer = FIREBALL_RELOAD_TIME
+      _shoot_fireball(get_global_mouse_position())
 
 func _shoot_fireball(target):
   if _shrink_curr_room(FIREBALL_COST):

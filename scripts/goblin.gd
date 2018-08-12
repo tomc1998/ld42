@@ -28,6 +28,28 @@ onready var anim_player = get_node("AnimationPlayer")
 onready var player = get_node("/root/World/Player")
 onready var world = get_node("/root/World")
 
+func _set_anim():
+  var anim_to_play = anim_player.current_animation
+  if state == STATE_WALK:
+    if abs(walk_dir.x) > abs(walk_dir.y):
+      if walk_dir.x > 0: anim_to_play = "walk_right"
+      if walk_dir.x < 0: anim_to_play = "walk_left"
+    else:
+      if walk_dir.y > 0: anim_to_play = "walk_down"
+      if walk_dir.y < 0: anim_to_play = "walk_up"
+  elif state == STATE_ATTACK:
+    var attack_dir = (player.global_position - global_position).normalized()
+    if abs(attack_dir.x) > abs(attack_dir.y):
+      if attack_dir.x > 0: anim_to_play = "idle_right"
+      if attack_dir.x < 0: anim_to_play = "idle_left"
+    else:
+      if attack_dir.y > 0: anim_to_play = "idle_down"
+      if attack_dir.y < 0: anim_to_play = "idle_up"
+
+  if anim_to_play != anim_player.current_animation:
+    anim_player.play(anim_to_play)
+
+
 func _choose_walk_space():
   var walk_target = player.global_position + \
       (global_position - player.global_position).normalized() * SHOOT_RANGE
@@ -68,6 +90,7 @@ func _process(delta):
       _choose_walk_space()
     else:
       _shoot_at(player.global_position)
+  _set_anim()
 
 func _ready():
   anim_player.play("idle_down")

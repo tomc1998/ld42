@@ -1,6 +1,6 @@
 * Necessary
 ** DONE Health pickups
-** TODO One more enemy type
+** DONE One more enemy type
 ** TODO One more spell type
 ** DONE Hold primary to shoot multiple spells
 ** DONE Spell animation

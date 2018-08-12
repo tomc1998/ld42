@@ -9,7 +9,7 @@
 ** TODO Music
 ** TODO SFX
 ** TODO Player art
-** TODO Fix tunnel collisions
+** DONE Fix tunnel collisions
 
 * Quite nice to have
 ** TODO Another enemy type

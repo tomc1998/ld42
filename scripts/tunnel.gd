@@ -25,6 +25,11 @@ func _construct_walls():
     var sprite = RoomWall._get_wall_sprite(RoomWall._get_vec_as_dir(-nor), false);
     sprite.scale = nor.abs() + dir.abs() * MAX_TUNNEL_SIZE / 16.0
     wall.add_child(sprite)
+    # Add collisions
+    var shape_owner = wall.create_shape_owner(wall)
+    var shape = RectangleShape2D.new()
+    shape.set_extents(Vector2(0, 0))
+    wall.shape_owner_add_shape(shape_owner, shape)
     walls.append(wall)
     add_child(wall)
 
@@ -64,4 +69,8 @@ func set_size(size):
     w.position = dir * (size+32.0) / 2 + nor * (TUNNEL_WIDTH / 2.0 + 8.0)
     var sprite = w.get_children()[0]
     sprite.scale = nor.abs() + dir.abs() * (size+8) / 16.0
+    # # Scale collisions
+    var shape_owner = w.get_shape_owners()[0]
+    var rect = w.shape_owner_get_shape(shape_owner, 0)
+    rect.extents = (nor.abs() * 16.0 + dir.abs() * (size+8)) / 2
     

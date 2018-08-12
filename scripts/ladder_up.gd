@@ -4,6 +4,7 @@ var confirm
 
 onready var player = get_node("/root/World/Player")
 onready var ui_layer = get_node("/root/World/UILayer")
+onready var dungeon_generator = get_node("/root/World/DungeonGenerator")
 
 func _ready():
   get_node("Hitbox").connect("body_entered", self, "on_body_entered")
@@ -15,4 +16,4 @@ func on_body_entered(body):
     ui_layer.add_child(ui_confirm)
 
 func on_leave():
-  print("LEAVING SIGNAL")
+  dungeon_generator.gen_level()

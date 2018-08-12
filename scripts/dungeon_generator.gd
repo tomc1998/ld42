@@ -15,6 +15,9 @@ const TOP = 1
 const RIGHT = 2
 const BOTTOM = 3
 
+# List of refs to ladders which shold be freed when we delete a level
+var curr_ladders = []
+
 # Convert a direction to a unit vector.
 func _dir_to_vec(dir):
   var ret
@@ -39,7 +42,7 @@ class GridRoom:
   var is_end = false
 
   # converts this gridroom to a Room scene.
-  func to_room(world, position):
+  func to_room(world, curr_ladders, position):
     var room = Room.instance()
     var room_wall = room.get_node("RoomWall")
     room.position = position
@@ -50,10 +53,12 @@ class GridRoom:
     if is_end: # Add the ladder up if this is the end
       var ladder = LadderUp.instance()
       ladder.position = room.position
+      curr_ladders.append(ladder)
       world.call_deferred("add_child", ladder)
     elif is_start: # Add the ladder down if this is the end
       var ladder = LadderDown.instance()
       ladder.position = room.position
+      curr_ladders.append(ladder)
       world.call_deferred("add_child", ladder)
     return room
 
@@ -142,8 +147,14 @@ func _gen_positions(size):
     end = Vector2(floor(rand_range(0, size)), floor(rand_range(0, size)))  
   return [start, end]
 
-func _ready():
+func gen_level():
   randomize()
+  # Clear all children and ladders
+  for i in range(0, get_child_count()):
+      get_child(i).queue_free()
+  for l in curr_ladders:
+    l.queue_free()
+  curr_ladders = []
   var positions = _gen_positions(SIZE)
   var grid = _gen_winning_path(SIZE, positions[0], positions[1])
   for y in grid.size():
@@ -151,7 +162,7 @@ func _ready():
     for x in row.size(): 
       var cell = row[x]
       if cell != null:
-        var room = cell.to_room(world,
+        var room = cell.to_room(world, curr_ladders,
           Vector2(x * (RoomWall.WALL_SIZE + 32.0),
                   y * (RoomWall.WALL_SIZE + 32.0)))
         add_child(room)
@@ -159,3 +170,5 @@ func _ready():
         if cell.is_start:
           player.position = room.position
 
+func _ready():
+  gen_level()

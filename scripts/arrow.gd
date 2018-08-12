@@ -17,7 +17,6 @@ func _ready():
   self.connect("body_entered", self, "_body_entered")
 
 func _body_entered(body):
-  print("HELLO")
   if body is Creature:
     if body.faction == Creature.PLAYER:
       body.damage(DAMAGE, (body.global_position - global_position).normalized() * 300)

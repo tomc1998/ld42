@@ -49,7 +49,6 @@ func _set_anim():
   if anim_to_play != anim_player.current_animation:
     anim_player.play(anim_to_play)
 
-
 func _choose_walk_space():
   var walk_target = player.global_position + \
       (global_position - player.global_position).normalized() * SHOOT_RANGE

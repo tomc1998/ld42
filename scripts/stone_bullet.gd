@@ -2,9 +2,9 @@ extends Area2D
 
 const DAMAGE = 1
 
-const SPEED = 380.0
+const SPEED = 500.0
 
-const Explosion = preload("res://scenes/fx/FireExplosion.tscn")
+const Explosion = preload("res://scenes/fx/StoneExplosion.tscn")
 
 onready var world = get_node("/root/World")
 

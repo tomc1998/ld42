@@ -20,4 +20,5 @@ func _process(delta):
     return
 
 func _ready():
+  get_node("SampleFirecharge").play()
   get_node("AnimationPlayer").play("charge")

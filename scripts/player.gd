@@ -4,17 +4,27 @@ signal health_changed(health)
 signal max_health_changed(max_health)
 
 var FIREBALL_RELOAD_TIME = 0.3
+var STONE_GUN_RELOAD_TIME = 0.4
+var STONE_GUN_BULLET_TIME = 0.08
 var primary_reload_timer = 0.0
 
+# Time until next stone gun bullet shot
+var stone_gun_bullet_timer = 0.0
+# Stone gun bullets left to shoot
+var stone_gun_bullets_left = 0
+
 const FIREBALL_COST = 3.0
+const STONE_GUN_COST = 12.0
 
 const Firecharge = preload("res://scenes/fx/Firecharge.tscn")
+const StoneBullet = preload("res://scenes/StoneBullet.tscn")
 const Room = preload("res://scenes/Room.tscn")
 
 export var speed = 60
 export var sprint_modifier = 2.4
 
 onready var world = get_node("/root/World")
+onready var spell_selector = get_node("/root/World/UILayer/SpellSelector")
 
 func _init():
   self.faction = PLAYER
@@ -66,6 +76,13 @@ func _physics_process(delta):
 
   ._process(delta)
 
+  if stone_gun_bullets_left > 0:
+    stone_gun_bullet_timer -= delta
+    if stone_gun_bullet_timer <= 0:
+      _shoot_stone_gun(get_global_mouse_position())
+      stone_gun_bullet_timer = STONE_GUN_BULLET_TIME
+      stone_gun_bullets_left -= 1
+
   # Reload
   if primary_reload_timer > 0:
     primary_reload_timer -= delta
@@ -74,8 +91,23 @@ func _physics_process(delta):
   else:
     # Check for fireball shooting
     if Input.is_action_pressed("primary"):
-      primary_reload_timer = FIREBALL_RELOAD_TIME
-      _shoot_fireball(get_global_mouse_position())
+      _shoot(get_global_mouse_position())
+
+func _shoot(target):
+  if spell_selector.get_curr_spell() == spell_selector.FIREBALL:
+    primary_reload_timer = FIREBALL_RELOAD_TIME
+    _shoot_fireball(target)
+  elif spell_selector.get_curr_spell() == spell_selector.STONE_GUN:
+    if _shrink_curr_room(STONE_GUN_COST):
+      primary_reload_timer = STONE_GUN_RELOAD_TIME
+      stone_gun_bullets_left = 3
+
+func _shoot_stone_gun(target):
+  var vec = (target - self.position).normalized()
+  var bullet = StoneBullet.instance()
+  bullet.set_dir(vec)
+  bullet.position = position + vec * 8.0
+  world.add_child(bullet)
 
 func _shoot_fireball(target):
   if _shrink_curr_room(FIREBALL_COST):

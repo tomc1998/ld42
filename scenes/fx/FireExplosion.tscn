@@ -1,15 +1,18 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scripts/fire_explosion.gd" type="Script" id=1]
-[ext_resource path="res://assets/sfx/fireball_hit.wav" type="AudioStream" id=2]
+[ext_resource path="res://scripts/explosion.gd" type="Script" id=1]
+[ext_resource path="res://scenes/fx/FireParticle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/sfx/fireball_hit.wav" type="AudioStream" id=3]
 
 [node name="FireExplosion" type="Node2D"]
 
 script = ExtResource( 1 )
+Particle = ExtResource( 2 )
+num_particles = 24
 
 [node name="SampleFireballHit" type="AudioStreamPlayer2D" parent="." index="0"]
 
-stream = ExtResource( 2 )
+stream = ExtResource( 3 )
 volume_db = -5.83
 autoplay = true
 max_distance = 2000.0

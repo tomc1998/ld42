@@ -1,7 +1,7 @@
 * Necessary
 ** DONE Health pickups
 ** DONE One more enemy type
-** TODO One more spell type
+** DONE One more spell type
 ** DONE Hold primary to shoot multiple spells
 ** DONE Spell animation
 ** DONE Score multiplier
@@ -14,9 +14,10 @@
 *** DONE Gameover
 ** DONE Music
 ** DONE SFX
-** TODO Player art
+** DONE Player art
 ** DONE Fix tunnel collisions
 ** DONE Fix slimes not stopping jumping when hitting wall
+** TODO Chests to pickup spells / hearts
 
 * Quite nice to have
 ** TODO Another enemy type

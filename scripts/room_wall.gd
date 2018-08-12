@@ -20,7 +20,7 @@ const BOTTOM = 8
 
 var size = WALL_SIZE - 2.0
 var target_size = size
-const SHRINK_SPEED = 12.0
+const SHRINK_SPEED = 24.0
 
 # Meta-data for walls, for when we're shrinking rooms
 class WallMeta:

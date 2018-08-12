@@ -65,7 +65,6 @@ class GridRoom:
       world.call_deferred("add_child", ladder)
     return room
 
-
 # # Given a size, returns a matrix of GridRoom objects (or null) containing rooms.
 # # Rooms will always be hori / verti adjacent. Matrix is a list of lists.
 # func _generate_rooms(size):

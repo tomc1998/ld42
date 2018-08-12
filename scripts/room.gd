@@ -1,6 +1,7 @@
 extends Node2D
 
 const Slime = preload("res://scenes/Slime.tscn")
+const GoblinArcher = preload("res://scenes/GoblinArcher.tscn")
 
 var does_spawn_monsters = true
 
@@ -16,8 +17,11 @@ func _spawn_in_shape(type, num, position=Vector2(0,0), radius=100.0):
     angle += step
 
 func _spawn_monsters():
-  _spawn_in_shape(Slime, floor(rand_range(2, 7)))
+  var val = rand_range(0, 2)
+  if val < 1:
+    _spawn_in_shape(Slime, floor(rand_range(2, 7)))
+  elif val < 2:
+    _spawn_in_shape(GoblinArcher, floor(rand_range(1, 3)))
 
 func _ready():
   if does_spawn_monsters: _spawn_monsters()
-

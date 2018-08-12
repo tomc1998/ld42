@@ -3,9 +3,11 @@ extends "creature.gd"
 signal health_changed(health)
 signal max_health_changed(max_health)
 
-var FIREBALL_RELOAD_TIME = 0.3
-var STONE_GUN_RELOAD_TIME = 0.4
-var STONE_GUN_BULLET_TIME = 0.08
+const FIREBALL_RELOAD_TIME = 0.3
+const STONE_GUN_RELOAD_TIME = 0.4
+const AIR_WAVE_RELOAD_TIME = 0.5
+const STONE_GUN_BULLET_TIME = 0.08
+const AIR_WAVE_SPEED = 250
 var primary_reload_timer = 0.0
 
 # Time until next stone gun bullet shot
@@ -13,11 +15,18 @@ var stone_gun_bullet_timer = 0.0
 # Stone gun bullets left to shoot
 var stone_gun_bullets_left = 0
 
+# If > 0, travelling on air wave
+var air_wave_time = 0.0
+# Direction of air wave travel
+var air_wave_dir = Vector2(0,0)
+
 const FIREBALL_COST = 3.0
 const STONE_GUN_COST = 12.0
+const AIR_WAVE_COST = 14.0
 
 const Firecharge = preload("res://scenes/fx/Firecharge.tscn")
 const StoneBullet = preload("res://scenes/StoneBullet.tscn")
+const AirWave = preload("res://scenes/AirWave.tscn")
 const Room = preload("res://scenes/Room.tscn")
 
 export var speed = 60
@@ -59,19 +68,25 @@ func _set_anim(move_vec, sprinting):
 
 func _physics_process(delta):
   var move_vec = Vector2(0, 0)
-  var sprinting = false
-  if Input.is_action_pressed("move_left"): move_vec.x = -speed
-  if Input.is_action_pressed("move_right"): move_vec.x = speed
-  if Input.is_action_pressed("move_up"): move_vec.y = -speed
-  if Input.is_action_pressed("move_down"): move_vec.y = speed
-  # if Input.is_action_pressed("sprint"):
-  #   if !(move_vec.x == 0 && move_vec.y == 0):
-  #     sprinting = true
-  #     move_vec *= sprint_modifier
-  # Just sprint by default for now
-  sprinting = true
-  move_vec *= sprint_modifier
-  _set_anim(move_vec, sprinting)
+  if air_wave_time > 0:
+    air_wave_time -= delta
+    if air_wave_time < 0:
+      air_wave_time = 0
+    move_vec = air_wave_dir * AIR_WAVE_SPEED
+  else:
+    var sprinting = false
+    if Input.is_action_pressed("move_left"): move_vec.x = -speed
+    if Input.is_action_pressed("move_right"): move_vec.x = speed
+    if Input.is_action_pressed("move_up"): move_vec.y = -speed
+    if Input.is_action_pressed("move_down"): move_vec.y = speed
+    # if Input.is_action_pressed("sprint"):
+    #   if !(move_vec.x == 0 && move_vec.y == 0):
+    #     sprinting = true
+    #     move_vec *= sprint_modifier
+    # Just sprint by default for now
+    sprinting = true
+    move_vec *= sprint_modifier
+    _set_anim(move_vec, sprinting)
   move_and_slide(move_vec)
 
   ._process(delta)
@@ -89,7 +104,7 @@ func _physics_process(delta):
     if primary_reload_timer <= 0:
       primary_reload_timer = 0.0
   else:
-    # Check for fireball shooting
+    # Check for shooting
     if Input.is_action_pressed("primary"):
       _shoot(get_global_mouse_position())
 
@@ -97,10 +112,29 @@ func _shoot(target):
   if spell_selector.get_curr_spell() == spell_selector.FIREBALL:
     primary_reload_timer = FIREBALL_RELOAD_TIME
     _shoot_fireball(target)
+  elif spell_selector.get_curr_spell() == spell_selector.AIR_WAVE:
+    if _shrink_curr_room(AIR_WAVE_COST):
+      primary_reload_timer = AIR_WAVE_RELOAD_TIME
+      air_wave_time = 0.3
+      air_wave_dir = (target - global_position).normalized()
+      _shoot_air_wave(target)
   elif spell_selector.get_curr_spell() == spell_selector.STONE_GUN:
     if _shrink_curr_room(STONE_GUN_COST):
       primary_reload_timer = STONE_GUN_RELOAD_TIME
       stone_gun_bullets_left = 3
+
+func _shoot_air_wave(target):
+  var vec = (target - self.position).normalized()
+  var vec_angle = vec.angle()
+  var NUM_AIR_WAVE = 5
+  var AIR_WAVE_SPREAD = PI/4
+  for i in range(NUM_AIR_WAVE):
+    var angle = vec_angle - AIR_WAVE_SPREAD / 2 + (AIR_WAVE_SPREAD/NUM_AIR_WAVE) * i
+    var wave = AirWave.instance()
+    var dir = Vector2(cos(angle), sin(angle))
+    wave.set_dir(dir)
+    wave.position = position + dir * 8.0
+    world.add_child(wave)
 
 func _shoot_stone_gun(target):
   var vec = (target - self.position).normalized()

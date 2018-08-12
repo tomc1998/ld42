@@ -1,12 +1,14 @@
 extends Node2D
 
 const FIREBALL_ICON = preload("res://assets/art/fireball_icon.png")
+const AIR_WAVE_ICON = preload("res://assets/art/air_wave.png")
 const STONE_GUN_ICON = preload("res://assets/art/stone_gun_icon.png")
 
 const FIREBALL = 0
 const STONE_GUN = 1
+const AIR_WAVE = 2
 
-var available_spells = [FIREBALL]
+var available_spells = [FIREBALL, AIR_WAVE]
 
 var curr_spell = 0
 
@@ -17,6 +19,8 @@ func _update_sprite():
     sprite.texture = FIREBALL_ICON
   elif available_spells[curr_spell] == STONE_GUN:
     sprite.texture = STONE_GUN_ICON
+  elif available_spells[curr_spell] == AIR_WAVE:
+    sprite.texture = AIR_WAVE_ICON
 
 func _process(delta):
   self.position = get_viewport().size - Vector2(40.0, 40.0)

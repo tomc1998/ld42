@@ -19,7 +19,7 @@
 ** DONE Fix slimes not stopping jumping when hitting wall
 ** DONE Difficulty ramp
 ** DONE Chests to pickup spells / hearts
-** TODO Make spells drop from chests
+** DONE Make spells drop from chests
 ** DONE Another enemy type
 ** TODO Another spell type
 

@@ -14,6 +14,7 @@ func _init():
   self.faction = PLAYER
   self.max_health = 10
   self.health = self.max_health
+  self.death_score = 0
 
 # Given a movement vector, set the current animation of the animation player.
 func _set_anim(move_vec, sprinting):

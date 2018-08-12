@@ -1,10 +1,15 @@
 extends KinematicBody2D
 
+onready var score = get_node("/root/score")
+
 # Additional force applied other than walking
 var knockback = Vector2(0,0)
 
 const PLAYER = 0
 const ENEMY = 1
+
+# The score for killing this creature (assuming this is an ENEMY)
+var death_score = 50
 
 var faction = ENEMY
 
@@ -34,4 +39,6 @@ func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
   if self.health <= 0:
+    print("HELLO")
+    score.add_score(death_score)
     queue_free()

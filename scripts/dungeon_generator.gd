@@ -51,7 +51,7 @@ class GridRoom:
     if self.connections[RIGHT]: room_wall.has_doors |= room_wall.RIGHT
     if self.connections[BOTTOM]: room_wall.has_doors |= room_wall.BOTTOM
     var angle = rand_range(0, 2 * PI)
-    var ladder_offset = Vector2(cos(angle), sin(angle)) * 80.0
+    var ladder_offset = Vector2(cos(angle), sin(angle)) * 30.0
     if is_end: # Add the ladder up if this is the end
       var ladder = LadderUp.instance()
       ladder.position = room.position + ladder_offset

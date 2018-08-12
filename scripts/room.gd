@@ -25,8 +25,9 @@ func _spawn_monsters():
     _spawn_in_shape(GoblinArcher, floor(rand_range(1, 3)))
 
 func _spawn_treasure():
-  var chest = Chest.instance()
-  add_child(chest)
+  if rand_range(0, 1) < 0.2:
+    var chest = Chest.instance()
+    add_child(chest)
 
 func _ready():
   if does_spawn_monsters:

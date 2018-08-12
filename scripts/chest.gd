@@ -33,6 +33,7 @@ func _input(event):
       && !opened && player_near:
     opened = true
     get_node("Sprite").frame = 1
+    get_node("SampleOpenChest").play()
     help_text.visible = false
     # Spawn drops
     var drop_types = drops[floor(rand_range(0, drops.size()))]

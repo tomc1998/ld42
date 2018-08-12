@@ -6,7 +6,7 @@ const STONE_GUN_ICON = preload("res://assets/art/stone_gun_icon.png")
 const FIREBALL = 0
 const STONE_GUN = 1
 
-var available_spells = [FIREBALL, STONE_GUN]
+var available_spells = [FIREBALL]
 
 var curr_spell = 0
 

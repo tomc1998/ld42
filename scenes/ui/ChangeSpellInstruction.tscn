@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scripts/leave_level_confirm.gd" type="Script" id=1]
+[ext_resource path="res://scripts/esc_dismiss.gd" type="Script" id=1]
 [ext_resource path="res://assets/VCR_OSD_MONO_1.001.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
@@ -12,7 +12,7 @@ extra_spacing_bottom = 8
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Resource", "Settings" ]
 
-[node name="LeaveLevelConfirm" type="ColorRect" index="0"]
+[node name="ChangeSpellInstruction" type="ColorRect"]
 
 pause_mode = 2
 anchor_left = 0.0
@@ -39,10 +39,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 123.0
-margin_top = 80.0
-margin_right = 36.0
-margin_bottom = -118.0
+margin_left = 83.0
+margin_top = 56.0
+margin_right = 154.0
+margin_bottom = -151.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 0.5, 0.5 )
@@ -54,12 +54,12 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_fonts/normal_font = SubResource( 1 )
 bbcode_enabled = false
-bbcode_text = "Leave level?"
+bbcode_text = "Use (E) and (Q) to choose your spell"
 visible_characters = -1
 percent_visible = 1.0
 meta_underlined = true
 tab_size = 4
-text = "Leave level?"
+text = "Use (E) and (Q) to choose your spell"
 scroll_active = true
 scroll_following = false
 selection_enabled = false
@@ -72,9 +72,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 222.0
+margin_left = 169.0
 margin_top = 167.0
-margin_right = 137.0
+margin_right = -95.0
 margin_bottom = -35.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -88,53 +88,18 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_fonts/normal_font = SubResource( 1 )
 bbcode_enabled = false
-bbcode_text = "No, Stay 
- (ESC)"
+bbcode_text = " Ok!
+(ESC)"
 visible_characters = -1
 percent_visible = 1.0
 meta_underlined = true
 tab_size = 4
-text = "No, Stay 
- (ESC)"
+text = " Ok!
+(ESC)"
 scroll_active = true
 scroll_following = false
 selection_enabled = true
 override_selected_font_color = false
 _sections_unfolded = [ "Anchor", "BBCode", "Hint", "Rect", "Theme", "custom_fonts" ]
-
-[node name="RichTextLabel3" type="RichTextLabel" parent="." index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 61.0
-margin_top = 167.0
-margin_right = -26.0
-margin_bottom = -31.0
-grow_horizontal = 0
-grow_vertical = 0
-rect_scale = Vector2( 0.5, 0.5 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = true
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-custom_fonts/normal_font = SubResource( 1 )
-bbcode_enabled = false
-bbcode_text = "Yes, Leave 
-  (SPACE)"
-visible_characters = -1
-percent_visible = 1.0
-meta_underlined = true
-tab_size = 4
-text = "Yes, Leave 
-  (SPACE)"
-scroll_active = true
-scroll_following = false
-selection_enabled = false
-override_selected_font_color = false
-_sections_unfolded = [ "Anchor", "BBCode", "Rect", "Theme", "custom_fonts" ]
 
 

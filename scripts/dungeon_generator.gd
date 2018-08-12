@@ -50,14 +50,17 @@ class GridRoom:
     if self.connections[TOP]: room_wall.has_doors |= room_wall.TOP
     if self.connections[RIGHT]: room_wall.has_doors |= room_wall.RIGHT
     if self.connections[BOTTOM]: room_wall.has_doors |= room_wall.BOTTOM
+    var angle = rand_range(0, 2 * PI)
+    var ladder_offset = Vector2(cos(angle), sin(angle)) * 80.0
     if is_end: # Add the ladder up if this is the end
       var ladder = LadderUp.instance()
-      ladder.position = room.position
+      ladder.position = room.position + ladder_offset
       curr_ladders.append(ladder)
       world.call_deferred("add_child", ladder)
     elif is_start: # Add the ladder down if this is the end
+      room.does_spawn_monsters = false
       var ladder = LadderDown.instance()
-      ladder.position = room.position
+      ladder.position = room.position + ladder_offset
       curr_ladders.append(ladder)
       world.call_deferred("add_child", ladder)
     return room

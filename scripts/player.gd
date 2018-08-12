@@ -109,6 +109,7 @@ func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
   emit_signal("health_changed", self.health)
+  get_node("SampleHurt").play()
   if self.health <= 0:
     get_tree().change_scene("res://scenes/ui/GameOver.tscn")
 

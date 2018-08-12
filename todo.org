@@ -13,7 +13,7 @@
 *** DONE Add highscore name
 *** DONE Gameover
 ** DONE Music
-** TODO SFX
+** DONE SFX
 ** TODO Player art
 ** DONE Fix tunnel collisions
 ** DONE Fix slimes not stopping jumping when hitting wall

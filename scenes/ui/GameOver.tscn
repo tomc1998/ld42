@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/VCR_OSD_MONO_1.001.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://scripts/game_over.gd" type="Script" id=2]
+[ext_resource path="res://assets/sfx/game_over.wav" type="AudioStream" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -43,5 +44,13 @@ selection_enabled = false
 override_selected_font_color = false
 script = ExtResource( 2 )
 _sections_unfolded = [ "BBCode", "Rect", "custom_fonts" ]
+
+[node name="SampleGameOver" type="AudioStreamPlayer" parent="." index="1"]
+
+stream = ExtResource( 3 )
+volume_db = -12.59
+autoplay = true
+mix_target = 0
+bus = "Master"
 
 

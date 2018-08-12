@@ -2,12 +2,9 @@ extends Area2D
 
 const DAMAGE = 1
 
-const FireParticle = preload("res://scenes/fx/FireParticle.tscn")
-
-const FIRE_PARTICLE_SPEED = 180.0
-const FIRE_PARTICLE_VARIATION = 80.0
-
 const FIREBALL_SPEED = 380.0
+
+const FireExplosion = preload("res://scenes/fx/FireExplosion.tscn")
 
 onready var world = get_node("/root/World")
 
@@ -23,12 +20,7 @@ func set_dir(vec):
 func _on_Fireball_body_entered(body):
   if body.has_method("damage"):
     body.callv("damage", [DAMAGE, (body.position - position).normalized() * 200])
-  for i in range(24):
-    var particle = FireParticle.instance()
-    var vel = Vector2(rand_range(-1, 1), rand_range(-1, 1)).normalized() * \
-           (FIRE_PARTICLE_SPEED + \
-           rand_range(-FIRE_PARTICLE_VARIATION, FIRE_PARTICLE_VARIATION))
-    particle._set_vel(vel)
-    particle.position = position
-    world.add_child(particle)
+  var fire_explosion = FireExplosion.instance()
+  fire_explosion.position = global_position
+  world.add_child(fire_explosion)
   queue_free()

@@ -56,6 +56,7 @@ func _spawn_drops():
 func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
+  get_node("SampleHurt").play()
   if self.health <= 0:
     score.add_score(death_score)
     var sc = ScoreNotifier.instance()

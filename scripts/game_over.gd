@@ -2,7 +2,7 @@ extends RichTextLabel
 
 onready var score = get_node("/root/score")
 
-const LIFETIME = 1.0
+const LIFETIME = 3.0
 var death_timer = LIFETIME
 
 func _process(delta):
@@ -20,3 +20,6 @@ func _process(delta):
     else:
       get_tree().change_scene("res://scenes/ui/Highscores.tscn")
 
+
+func _ready():
+  get_node("/root/Music").stop()

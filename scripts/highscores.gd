@@ -12,6 +12,7 @@ func _ready():
     hn.position.y = curr_y
     add_child(hn)
     curr_y += 50.0
+  get_node("/root/Music").play()
 
 func _input(event):
   if event is InputEventKey && event.pressed:

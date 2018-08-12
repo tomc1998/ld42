@@ -1,6 +1,8 @@
 extends RichTextLabel
 
-const LIFETIME = 4.0
+onready var score = get_node("/root/score")
+
+const LIFETIME = 1.0
 var death_timer = LIFETIME
 
 func _process(delta):
@@ -12,6 +14,9 @@ func _process(delta):
 
   death_timer -= delta;
   if death_timer <= 0:
-    queue_free()
-    return
+    # Check if we exceed the current highscores
+    if score.is_current_score_highscore():
+      get_tree().change_scene("res://scenes/ui/EnterHighscore.tscn")
+    else:
+      get_tree().change_scene("res://scenes/ui/Highscores.tscn")
 

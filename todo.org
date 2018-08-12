@@ -5,6 +5,7 @@
 ** TODO UI
 *** TODO Menus
 *** TODO High scores
+*** DONE Add highscore name
 *** DONE Gameover
 ** TODO Music
 ** TODO SFX

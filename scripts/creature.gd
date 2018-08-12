@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 const ScoreNotifier = preload("res://scenes/fx/ScoreNotifier.tscn")
+const Drops = preload("drops.gd")
 
 onready var score = get_node("/root/score")
 onready var _world = get_node("/root/World")
@@ -21,6 +22,9 @@ var normal_modulation
 var max_health = 5
 var health = max_health
 
+# Override to make this entity drop stuff
+func potential_drops(): return []
+
 # Call this from the subclass to apply knockback and damage tint
 func _process(delta):
   move_and_slide(knockback)
@@ -37,6 +41,17 @@ func _process(delta):
     self.modulate.g = 1
     self.modulate.b = 1
 
+func _spawn_drops():
+  var drops = potential_drops()
+  if drops.size() == 0: return
+  if rand_range(0, 1) > 0.8:
+    var drop_type = drops[floor(rand_range(0, drops.size()))]
+    var drop = Drops.create_drop(drop_type)
+    drop.position = self.global_position
+    drop.drop_type = drop_type
+    drop.choose_random_vel()
+    _world.add_child(drop)
+
 # Damage this entity and push it back on the given knockback vec
 func damage(amount, knockback_vec):
   self.knockback += knockback_vec
@@ -47,4 +62,5 @@ func damage(amount, knockback_vec):
     sc.text = str(death_score)
     sc.rect_position = global_position
     _world.add_child(sc)
+    _spawn_drops()
     queue_free()

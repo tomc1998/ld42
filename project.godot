@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 score="*res://scripts/score.gd"
+drops="*res://scripts/drops.gd"
 
 [input]
 

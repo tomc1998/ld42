@@ -98,3 +98,9 @@ func damage(amount, knockback_vec):
   emit_signal("health_changed", self.health)
   if self.health <= 0:
     get_tree().change_scene("res://scenes/ui/GameOver.tscn")
+
+func heal(amount):
+  self.health += amount
+  self.health = min(self.health, self.max_health)
+  print("HEALED")
+  emit_signal("health_changed", self.health)

@@ -1,5 +1,6 @@
 extends "creature.gd"
 
+const Drops = preload("drops.gd")
 const Creature = preload("creature.gd")
 
 onready var player = get_node("/root/World/Player")
@@ -56,6 +57,9 @@ func _process(delta):
 func _ready():
   anim_player.play("idle")
   get_node("Hurtbox").connect("body_entered", self, "on_body_entered")
+
+func potential_drops():
+  return [Drops.Drops.HEART]
 
 func on_body_entered(body):
   if body is Creature:

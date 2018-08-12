@@ -25,6 +25,17 @@ var _score = 0
 
 var _multiplier = 1
 
+const COMBO_TIME = 2.0
+var _multiplier_timer = COMBO_TIME
+
+func _process(delta):
+  _multiplier_timer -= delta
+  if _multiplier_timer <= 0:
+    _multiplier = max(1, _multiplier-1)
+    _multiplier_timer = COMBO_TIME
+    emit_signal("multiplier_changed", _multiplier)
+
+
 func reset():
   _score = 0
   _multiplier = 1
@@ -58,3 +69,8 @@ func add_highscore(name):
   if highscores.size() < NUM_HIGHSCORES:
     highscores.append(Highscore.new(name, _score))
   
+# Call when an enemy is killed - this will handle the multiplier
+func enemy_killed():
+    _multiplier += 1
+    _multiplier_timer = COMBO_TIME
+    emit_signal("multiplier_changed", _multiplier)

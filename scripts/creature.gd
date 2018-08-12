@@ -59,8 +59,10 @@ func damage(amount, knockback_vec):
   if self.health <= 0:
     score.add_score(death_score)
     var sc = ScoreNotifier.instance()
-    sc.text = str(death_score)
+    sc.text = str(death_score * score._multiplier)
     sc.rect_position = global_position
     _world.add_child(sc)
     _spawn_drops()
+    if faction == ENEMY: # Handle multiplier
+      score.enemy_killed()
     queue_free()

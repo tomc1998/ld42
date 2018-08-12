@@ -1,9 +1,11 @@
 extends Node
 
 const Room = preload("res://scenes/Room.tscn")
-const RoomWall = preload("res://scenes/RoomWall.tscn")
+const RoomWall = preload("res://scripts/room_wall.gd")
+const LadderUp = preload("res://scenes/LadderUp.tscn")
+const LadderDown = preload("res://scenes/LadderDown.tscn")
 
-onready var world = get_node("/root/World")
+onready var world = get_tree().get_root().get_node("World")
 onready var player = world.get_node("Player")
 
 const SIZE = 4
@@ -37,13 +39,22 @@ class GridRoom:
   var is_end = false
 
   # converts this gridroom to a Room scene.
-  func to_room():
+  func to_room(world, position):
     var room = Room.instance()
     var room_wall = room.get_node("RoomWall")
+    room.position = position
     if self.connections[LEFT]: room_wall.has_doors |= room_wall.LEFT
     if self.connections[TOP]: room_wall.has_doors |= room_wall.TOP
     if self.connections[RIGHT]: room_wall.has_doors |= room_wall.RIGHT
     if self.connections[BOTTOM]: room_wall.has_doors |= room_wall.BOTTOM
+    if is_end: # Add the ladder up if this is the end
+      var ladder = LadderUp.instance()
+      ladder.position = room.position
+      world.call_deferred("add_child", ladder)
+    elif is_start: # Add the ladder down if this is the end
+      var ladder = LadderDown.instance()
+      ladder.position = room.position
+      world.call_deferred("add_child", ladder)
     return room
 
 
@@ -140,12 +151,11 @@ func _ready():
     for x in row.size(): 
       var cell = row[x]
       if cell != null:
-        var room = cell.to_room()
-        var room_wall = room.get_node("RoomWall")
-        room.position.x = x * (room_wall.WALL_SIZE + 32.0)
-        room.position.y = y * (room_wall.WALL_SIZE + 32.0)
+        var room = cell.to_room(world,
+          Vector2(x * (RoomWall.WALL_SIZE + 32.0),
+                  y * (RoomWall.WALL_SIZE + 32.0)))
         add_child(room)
         # Set the player's starting position
-        # if cell.is_start:
-        #   player.position = room.position
+        if cell.is_start:
+          player.position = room.position
 

@@ -12,7 +12,7 @@ onready var world = get_node("/root/World")
 
 func _init():
   self.faction = PLAYER
-  self.max_health = 10
+  self.max_health = 1
   self.health = self.max_health
   self.death_score = 0
 
@@ -91,4 +91,4 @@ func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
   if self.health <= 0:
-    print("PLAYER DEAD")
+    get_tree().change_scene("res://scenes/ui/GameOver.tscn")

@@ -1,25 +1,28 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/virale/virale.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://scripts/score_notifier.gd" type="Script" id=2]
+[ext_resource path="res://assets/VCR_OSD_MONO_1.001.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://scripts/centered_pulsing.gd" type="Script" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 
-size = 16
-use_mipmaps = false
+size = 41
+use_mipmaps = true
 use_filter = false
-extra_spacing_char = -4
 font_data = ExtResource( 1 )
-_sections_unfolded = [ "Extra Spacing", "Font", "Font/fallback", "Resource", "Settings" ]
+_sections_unfolded = [ "Font", "Settings" ]
 
-[node name="ScoreNotifier" type="RichTextLabel"]
+[node name="GameOver" type="Node2D" index="0"]
+
+[node name="GameOverText" type="RichTextLabel" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 200.0
-margin_bottom = 40.0
+margin_left = 420.0
+margin_top = 280.0
+margin_right = 643.0
+margin_bottom = 326.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 mouse_filter = 0
@@ -33,12 +36,12 @@ visible_characters = -1
 percent_visible = 1.0
 meta_underlined = true
 tab_size = 4
-text = ""
+text = "Game Over"
 scroll_active = true
 scroll_following = false
 selection_enabled = false
 override_selected_font_color = false
 script = ExtResource( 2 )
-_sections_unfolded = [ "BBCode", "Rect", "custom_colors", "custom_fonts" ]
+_sections_unfolded = [ "BBCode", "Rect", "custom_fonts" ]
 
 

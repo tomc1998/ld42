@@ -6,9 +6,8 @@ const Drops = preload("drops.gd")
 onready var help_text = get_node("HelpText")
 onready var world = get_node("/root/World")
 
-const drops = [[Drops.Drops.HEART], \
-             [Drops.Drops.STONE_BULLET], \
-             [Drops.Drops.AIR_WAVE]]
+const drops = [[Drops.Drops.STONE_BULLET], \
+              [Drops.Drops.AIR_WAVE]]
 
 var player_near = false
 var opened = false

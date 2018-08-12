@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scripts/air_wave.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/air_wave.png" type="Texture" id=2]
-[ext_resource path="res://assets/sfx/fireball.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sfx/air_wave.wav" type="AudioStream" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -35,7 +35,7 @@ shape = SubResource( 1 )
 [node name="SampleFireball" type="AudioStreamPlayer2D" parent="." index="2"]
 
 stream = ExtResource( 3 )
-volume_db = -15.92
+volume_db = -20.82
 autoplay = true
 max_distance = 2000.0
 attenuation = 1.0

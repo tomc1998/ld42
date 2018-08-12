@@ -8,7 +8,7 @@ const GoblinArcher = preload("res://scenes/GoblinArcher.tscn")
 const challenge = {
   Bat: 0,
   GoblinArcher: 2,
-  Slime: 4,
+  Slime: 3,
 }
 
 onready var score = get_node("/root/score")
@@ -37,7 +37,7 @@ func _spawn_monsters():
     monster_types.append(GoblinArcher)
 
   var monster_type = monster_types[floor(rand_range(0, monster_types.size()))]
-  var num = floor(rand_range(1, score.level - challenge[monster_type] + 2))
+  var num = floor(rand_range(1, min(score.level - challenge[monster_type] + 2, 5)))
   _spawn_in_shape(monster_type, num)
 
 func _spawn_treasure():

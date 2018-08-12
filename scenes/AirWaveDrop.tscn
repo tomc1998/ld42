@@ -13,7 +13,7 @@ radius = 5.25438
 custom_solver_bias = 0.0
 radius = 8.07039
 
-[node name="AirWaveDrop" type="KinematicBody2D" index="0"]
+[node name="AirWaveDrop" type="KinematicBody2D"]
 
 input_pickable = false
 collision_layer = 8

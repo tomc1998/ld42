@@ -6,7 +6,7 @@ const SPEED = 420.0
 
 const Explosion = preload("res://scenes/fx/AirExplosion.tscn")
 
-const LIFETIME = 0.4
+const LIFETIME = 0.6
 var death_timer = LIFETIME
 
 onready var world = get_node("/root/World")

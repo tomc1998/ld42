@@ -8,7 +8,7 @@ const FIREBALL = 0
 const STONE_GUN = 1
 const AIR_WAVE = 2
 
-var available_spells = [FIREBALL, AIR_WAVE]
+var available_spells = [FIREBALL]
 
 var curr_spell = 0
 

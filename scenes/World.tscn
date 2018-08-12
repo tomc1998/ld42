@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/DungeonGenerator.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scripts/dungeon_generator.gd" type="Script" id=3]
 
 [sub_resource type="Environment" id=1]
 
@@ -91,15 +90,22 @@ _sections_unfolded = [ "Sort", "Transform" ]
 [node name="Player" parent="." index="0" instance=ExtResource( 1 )]
 
 _sections_unfolded = [ "Collision", "Transform" ]
+sprint_modifier = 4.8
 
-[node name="DungeonGenerator" type="Node2D" parent="." index="1" instance=ExtResource( 2 )]
+[node name="DungeonGenerator" parent="." index="1" instance=ExtResource( 2 )]
 
-z_index = -10
-script = ExtResource( 3 )
 _sections_unfolded = [ "Pause", "Z Index" ]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
 
 environment = SubResource( 1 )
+
+[node name="UILayer" type="CanvasLayer" parent="." index="3"]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
 

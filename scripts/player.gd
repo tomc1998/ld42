@@ -6,7 +6,7 @@ const Fireball = preload("res://scenes/Fireball.tscn")
 const Room = preload("res://scenes/Room.tscn")
 
 export var speed = 60
-export var sprint_modifier = 1.8
+export var sprint_modifier = 4.8
 
 onready var world = get_node("/root/World")
 

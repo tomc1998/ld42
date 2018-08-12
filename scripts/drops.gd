@@ -7,7 +7,7 @@ enum Drops {
 }
 
 # Create a node for dropping, based on the drops enum. Breakpoints if not found.
-func create_drop(drop):
+static func create_drop(drop):
   match drop:
     Drops.HEART: return HeartDrop.instance()
     _: breakpoint

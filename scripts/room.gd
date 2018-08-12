@@ -1,5 +1,6 @@
 extends Node2D
 
+const Chest = preload("res://scenes/Chest.tscn")
 const Slime = preload("res://scenes/Slime.tscn")
 const GoblinArcher = preload("res://scenes/GoblinArcher.tscn")
 
@@ -23,5 +24,11 @@ func _spawn_monsters():
   elif val < 2:
     _spawn_in_shape(GoblinArcher, floor(rand_range(1, 3)))
 
+func _spawn_treasure():
+  var chest = Chest.instance()
+  add_child(chest)
+
 func _ready():
-  if does_spawn_monsters: _spawn_monsters()
+  if does_spawn_monsters:
+    _spawn_monsters()
+    _spawn_treasure()

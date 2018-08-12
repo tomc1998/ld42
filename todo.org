@@ -17,15 +17,16 @@
 ** DONE Player art
 ** DONE Fix tunnel collisions
 ** DONE Fix slimes not stopping jumping when hitting wall
+** TODO Difficulty ramp
 ** TODO Chests to pickup spells / hearts
 
 * Quite nice to have
 ** TODO Another enemy type
 ** TODO Another spell type
 ** TODO A 'dash'?
-** TODO Main menu
 
 * Stretch
 ** TODO Ending?
+** TODO Main menu
 ** TODO Powerups / upgrades
 *** TODO Bouncy fireballs?

@@ -1,8 +1,10 @@
 * Necessary
+** TODO Health pickups
 ** TODO One more enemy type
 ** TODO One more spell type
 ** DONE Scoring
 ** DONE UI
+*** DONE Show health
 *** DONE Menus
 *** DONE High scores
 *** DONE Add highscore name

@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/world.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/DungeonGenerator.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/ui/ScoreCounter.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/ui/Health.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Environment" id=1]
 
@@ -84,7 +85,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Adjustments", "Background", "Glow" ]
 
-[node name="World" type="YSort" index="0"]
+[node name="World" type="YSort"]
 
 sort_enabled = true
 script = ExtResource( 1 )
@@ -111,5 +112,7 @@ scale = Vector2( 1, 1 )
 transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
 [node name="ScoreCounter" parent="UILayer" index="0" instance=ExtResource( 4 )]
+
+[node name="Health" parent="UILayer" index="1" instance=ExtResource( 5 )]
 
 

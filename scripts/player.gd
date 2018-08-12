@@ -1,5 +1,8 @@
 extends "creature.gd"
 
+signal health_changed(health)
+signal max_health_changed(max_health)
+
 const FIREBALL_COST = 3.0
 
 const Fireball = preload("res://scenes/Fireball.tscn")
@@ -12,9 +15,11 @@ onready var world = get_node("/root/World")
 
 func _init():
   self.faction = PLAYER
-  self.max_health = 1
+  self.max_health = 5
   self.health = self.max_health
   self.death_score = 0
+  emit_signal("max_health_changed", max_health)
+  emit_signal("health_changed", health)
 
 # Given a movement vector, set the current animation of the animation player.
 func _set_anim(move_vec, sprinting):
@@ -90,5 +95,6 @@ func _shrink_curr_room(amount):
 func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
+  emit_signal("health_changed", self.health)
   if self.health <= 0:
     get_tree().change_scene("res://scenes/ui/GameOver.tscn")

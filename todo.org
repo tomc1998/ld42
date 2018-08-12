@@ -2,6 +2,7 @@
 ** TODO Health pickups
 ** TODO One more enemy type
 ** TODO One more spell type
+** TODO Score multiplier
 ** DONE Scoring
 ** DONE UI
 *** DONE Show health
@@ -13,7 +14,7 @@
 ** TODO SFX
 ** TODO Player art
 ** DONE Fix tunnel collisions
-** TODO Fix slimes not stopping jumping when hitting wall
+** DONE Fix slimes not stopping jumping when hitting wall
 
 * Quite nice to have
 ** TODO Another enemy type

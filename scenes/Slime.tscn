@@ -31,9 +31,9 @@ radius = 9.56494
 [sub_resource type="CircleShape2D" id=3]
 
 custom_solver_bias = 0.0
-radius = 10.0
+radius = 11.1616
 
-[node name="Slime" type="KinematicBody2D"]
+[node name="Slime" type="KinematicBody2D" index="0"]
 
 modulate = Color( 0, 0.561098, 1, 1 )
 self_modulate = Color( 0, 0.882812, 1, 1 )

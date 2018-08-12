@@ -17,7 +17,11 @@ const STATE_ATTACK = 2
 
 var state = STATE_IDLE
 
-var jump_target
+var jump_dir
+
+const JUMP_TIME = 0.5
+const JUMP_TIME_VAR = 0.1 # Variance
+var jump_time = 0.5
 
 const CHARGE_TIME = 0.8
 var charge_counter = CHARGE_TIME
@@ -37,14 +41,15 @@ func _process(delta):
       charge_counter = 0
       state = STATE_ATTACK
       anim_player.play("attack")
-      jump_target = global_position + (player.global_position - global_position).normalized() * JUMP_DISTANCE
+      jump_dir = (player.global_position - global_position).normalized()
+      jump_time = JUMP_TIME + rand_range(-JUMP_TIME_VAR, JUMP_TIME_VAR)
   elif state == STATE_ATTACK:
-    var length = (jump_target - global_position).length()
-    if 24.0 > length:
+    jump_time -= delta
+    if jump_time <= 0.0:
       state = STATE_IDLE
       anim_player.play("idle")
     else:
-      move_and_slide((jump_target - global_position).normalized() * JUMP_SPEED)
+      move_and_slide(jump_dir * JUMP_SPEED)
 
   ._process(delta)
 
@@ -56,4 +61,3 @@ func on_body_entered(body):
   if body is Creature:
     if body.faction != faction:
       body.damage(DAMAGE, (body.global_position - global_position).normalized() * 300)
-  state = STATE_IDLE

@@ -5,7 +5,7 @@ signal max_health_changed(max_health)
 
 const FIREBALL_COST = 3.0
 
-const Fireball = preload("res://scenes/Fireball.tscn")
+const Firecharge = preload("res://scenes/fx/Firecharge.tscn")
 const Room = preload("res://scenes/Room.tscn")
 
 export var speed = 60
@@ -67,10 +67,10 @@ func _physics_process(delta):
 func _shoot_fireball(target):
   if _shrink_curr_room(FIREBALL_COST):
     var vec = (target - self.position).normalized()
-    var fireball = Fireball.instance()
-    fireball.set_dir(vec)
-    fireball.position = position + vec * 8.0
-    world.add_child(fireball)
+    var firecharge = Firecharge.instance()
+    firecharge.fireball_dir = vec
+    firecharge.position = position + vec * 8.0
+    world.add_child(firecharge)
 
 # Find the room we're currently in (linear search) and shrink that one by the
 # given amount.

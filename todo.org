@@ -2,6 +2,8 @@
 ** DONE Health pickups
 ** TODO One more enemy type
 ** TODO One more spell type
+** TODO Hold primary to shoot multiple spells
+** TODO Spell animation
 ** DONE Score multiplier
 ** DONE Scoring
 ** DONE UI
@@ -10,7 +12,7 @@
 *** DONE High scores
 *** DONE Add highscore name
 *** DONE Gameover
-** TODO Music
+** DONE Music
 ** TODO SFX
 ** TODO Player art
 ** DONE Fix tunnel collisions

@@ -2,9 +2,9 @@
 ** TODO One more enemy type
 ** TODO One more spell type
 ** DONE Scoring
-** TODO UI
-*** TODO Menus
-*** TODO High scores
+** DONE UI
+*** DONE Menus
+*** DONE High scores
 *** DONE Add highscore name
 *** DONE Gameover
 ** TODO Music
@@ -17,6 +17,7 @@
 ** TODO Another enemy type
 ** TODO Another spell type
 ** TODO A 'dash'?
+** TODO Main menu
 
 * Stretch
 ** TODO Ending?

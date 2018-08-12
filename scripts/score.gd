@@ -12,6 +12,8 @@ signal multiplier_changed(multiplier)
 
 const NUM_HIGHSCORES = 5
 
+var level = 1
+
 # Ordered Highscore objects, highest first
 var highscores = [
     Highscore.new("Mad Max", 300000),
@@ -37,6 +39,7 @@ func _process(delta):
 
 
 func reset():
+  level = 1
   _score = 0
   _multiplier = 1
   emit_signal("score_changed", _score)

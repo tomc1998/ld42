@@ -18,7 +18,7 @@
 ** DONE Fix tunnel collisions
 ** DONE Fix slimes not stopping jumping when hitting wall
 ** TODO Difficulty ramp
-** TODO Chests to pickup spells / hearts
+** DONE Chests to pickup spells / hearts
 
 * Quite nice to have
 ** TODO Another enemy type

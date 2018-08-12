@@ -25,7 +25,7 @@ extents = Vector2( 10.2503, 12.4606 )
 custom_solver_bias = 0.0
 extents = Vector2( 14.2469, 14.716 )
 
-[node name="Chest" type="StaticBody2D" index="0"]
+[node name="Chest" type="StaticBody2D"]
 
 input_pickable = false
 collision_layer = 1

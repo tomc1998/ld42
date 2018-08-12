@@ -2,6 +2,7 @@ extends StaticBody2D
 
 var confirm
 
+onready var score = get_node("/root/score")
 onready var player = get_node("/root/World/Player")
 onready var ui_layer = get_node("/root/World/UILayer")
 onready var dungeon_generator = get_node("/root/World/DungeonGenerator")
@@ -16,4 +17,5 @@ func on_body_entered(body):
     ui_layer.add_child(ui_confirm)
 
 func on_leave():
+  score.level += 1
   dungeon_generator.gen_level()

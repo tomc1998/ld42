@@ -17,7 +17,7 @@
 custom_solver_bias = 0.0
 radius = 3.83897
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" index="0"]
 
 input_pickable = false
 collision_layer = 1
@@ -30,6 +30,7 @@ sprint_modifier = 2.399
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 
+position = Vector2( -0.523369, -6.48978 )
 texture = ExtResource( 2 )
 vframes = 4
 hframes = 4
@@ -55,7 +56,7 @@ blend_times = [  ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
 
-position = Vector2( 0, 5.69521 )
+position = Vector2( -0.418697, 0.252167 )
 shape = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="." index="3"]

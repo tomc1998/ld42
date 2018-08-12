@@ -6,7 +6,7 @@ const Creature = preload("creature.gd")
 onready var player = get_node("/root/World/Player")
 onready var anim_player = get_node("AnimationPlayer")
 
-const DAMAGE = 1
+const DAMAGE = 2
 
 const NOTICE_RANGE = 180
 const JUMP_SPEED = 180

@@ -1,12 +1,14 @@
 extends Node2D
 
 const Chest = preload("res://scenes/Chest.tscn")
+const Bat = preload("res://scenes/Bat.tscn")
 const Slime = preload("res://scenes/Slime.tscn")
 const GoblinArcher = preload("res://scenes/GoblinArcher.tscn")
 
 const challenge = {
-  Slime: 0,
-  GoblinArcher: 2
+  Bat: 0,
+  GoblinArcher: 2,
+  Slime: 4,
 }
 
 onready var score = get_node("/root/score")
@@ -26,7 +28,11 @@ func _spawn_in_shape(type, num, position=Vector2(0,0), radius=100.0):
 
 func _spawn_monsters():
   if rand_range(0, 1) < 0.1: return # Sometimes jus tmake an empty room
-  var monster_types = [Slime]
+  var monster_types = []
+  if score.level >= challenge[Slime]:
+    monster_types.append(Slime)
+  if score.level >= challenge[Bat]:
+    monster_types.append(Bat)
   if score.level >= challenge[GoblinArcher]:
     monster_types.append(GoblinArcher)
 

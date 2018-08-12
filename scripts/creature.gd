@@ -1,6 +1,9 @@
 extends KinematicBody2D
 
+const ScoreNotifier = preload("res://scenes/fx/ScoreNotifier.tscn")
+
 onready var score = get_node("/root/score")
+onready var _world = get_node("/root/World")
 
 # Additional force applied other than walking
 var knockback = Vector2(0,0)
@@ -39,6 +42,9 @@ func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
   if self.health <= 0:
-    print("HELLO")
     score.add_score(death_score)
+    var sc = ScoreNotifier.instance()
+    sc.text = str(death_score)
+    sc.rect_position = global_position
+    _world.add_child(sc)
     queue_free()

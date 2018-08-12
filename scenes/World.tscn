@@ -83,7 +83,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Adjustments", "Background", "Glow" ]
 
-[node name="World" type="YSort" index="0"]
+[node name="World" type="YSort"]
 
 sort_enabled = true
 _sections_unfolded = [ "Sort", "Transform", "Visibility", "Z Index" ]

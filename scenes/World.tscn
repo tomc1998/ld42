@@ -85,12 +85,11 @@ _sections_unfolded = [ "Adjustments", "Background", "Glow" ]
 [node name="World" type="YSort"]
 
 sort_enabled = true
-_sections_unfolded = [ "Sort", "Transform" ]
+_sections_unfolded = [ "Sort", "Transform", "Visibility", "Z Index" ]
 
 [node name="Player" parent="." index="0" instance=ExtResource( 1 )]
 
 _sections_unfolded = [ "Collision", "Transform" ]
-sprint_modifier = 4.8
 
 [node name="DungeonGenerator" parent="." index="1" instance=ExtResource( 2 )]
 

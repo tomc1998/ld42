@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends "creature.gd"
 
 const FIREBALL_COST = 3.0
 
@@ -10,11 +10,10 @@ export var sprint_modifier = 4.8
 
 onready var world = get_node("/root/World")
 
-export(int) var max_health = 10
-var health = max_health
-
-# Additional force applied other than walking
-var knockback = Vector2(0,0)
+func _init():
+  self.faction = PLAYER
+  self.max_health = 10
+  self.health = self.max_health
 
 # Given a movement vector, set the current animation of the animation player.
 func _set_anim(move_vec, sprinting):
@@ -51,21 +50,13 @@ func _physics_process(delta):
       sprinting = true
       move_vec *= sprint_modifier
   _set_anim(move_vec, sprinting)
-  move_and_slide(move_vec + knockback)
-  knockback *= 0.9
+  move_and_slide(move_vec)
+
+  ._process(delta)
 
   # Check for fireball shooting
   if Input.is_action_just_pressed("primary"):
     _shoot_fireball(get_global_mouse_position())
-
-  if knockback.length_squared() > 100.0:
-    self.modulate.r = 2
-    self.modulate.g = 0.5
-    self.modulate.b = 0.5
-  else:
-    self.modulate.r = 1
-    self.modulate.g = 1
-    self.modulate.b = 1
 
 func _shoot_fireball(target):
   if _shrink_curr_room(FIREBALL_COST):
@@ -99,3 +90,4 @@ func damage(amount, knockback_vec):
   self.knockback += knockback_vec
   self.health -= amount
   if self.health <= 0:
+    print("PLAYER DEAD")

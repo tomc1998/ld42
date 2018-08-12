@@ -1,7 +1,7 @@
 * Necessary
 ** TODO One more enemy type
 ** TODO One more spell type
-** TODO Scoring
+** DONE Scoring
 ** TODO UI
 *** TODO Menus
 *** TODO High scores
@@ -10,6 +10,7 @@
 ** TODO SFX
 ** TODO Player art
 ** DONE Fix tunnel collisions
+** TODO Fix slimes not stopping jumping when hitting wall
 
 * Quite nice to have
 ** TODO Another enemy type
